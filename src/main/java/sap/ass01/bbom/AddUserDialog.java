@@ -2,8 +2,7 @@ package sap.ass01.bbom;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 /**
  * 
@@ -12,7 +11,7 @@ import java.awt.event.ActionListener;
  */
 public class AddUserDialog extends JDialog {
 
-    private JTextField idField, errorField;
+    private JTextField idField;// , errorField;
     private JButton okButton;
     private JButton cancelButton;
     private EBikeApp app;
@@ -29,7 +28,7 @@ public class AddUserDialog extends JDialog {
 
     private void initializeComponents() {
         idField = new JTextField(15);
-        errorField = new JTextField(25);
+        // errorField = new JTextField(25);
         okButton = new JButton("OK");
         cancelButton = new JButton("Cancel");
     }
@@ -58,7 +57,7 @@ public class AddUserDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 // Implement OK button behavior here
                 String id = idField.getText();
-                app.addUser(id);                
+                app.addUser(id);
                 dispose();
             }
         });

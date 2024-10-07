@@ -2,22 +2,21 @@ package sap.ass01.bbom;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 /**
  * 
- * Courteously implemented by ChatGPT 
+ * Courteously implemented by ChatGPT
  * 
- * prompt: 
+ * prompt:
  * 
- * "Hello ChatGPT. Could you write me a Java class 
- *  implementing a JDialog with title "Adding E-Bike", 
- *  including "OK" and "Cancel" buttons, and some input fields, 
- *  namely: an id input field (with label "E-Bike ID"), 
- *  an x input field (with label "E-Bike location - X coord:") 
- *  and an y input field (with label "E-Bike location - Y coord:"). 
- *  Thanks a lot!"
+ * "Hello ChatGPT. Could you write me a Java class
+ * implementing a JDialog with title "Adding E-Bike",
+ * including "OK" and "Cancel" buttons, and some input fields,
+ * namely: an id input field (with label "E-Bike ID"),
+ * an x input field (with label "E-Bike location - X coord:")
+ * and an y input field (with label "E-Bike location - Y coord:").
+ * Thanks a lot!"
  * 
  */
 public class AddEBikeDialog extends JDialog {
@@ -28,7 +27,7 @@ public class AddEBikeDialog extends JDialog {
     private JButton okButton;
     private JButton cancelButton;
     private EBikeApp app;
-    
+
     public AddEBikeDialog(EBikeApp owner) {
         super(owner, "Adding E-Bike", true);
         this.app = owner;

@@ -1,35 +1,33 @@
 package sap.ass01.bbom;
 
-import java.util.Random;
-
 public class RideSimulation extends Thread {
-	
+
 	private Ride ride;
 	private User user;
-	
+
 	private EBikeApp app;
 	private volatile boolean stopped;
-	
+
 	public RideSimulation(Ride ride, User user, EBikeApp app) {
 		this.ride = ride;
 		this.user = user;
 		this.app = app;
 		stopped = false;
 	}
-	
+
 	public void run() {
 		var b = ride.getEBike();
 		b.updateSpeed(1);
-		
+
 		var lastTimeDecreasedCredit = System.currentTimeMillis();
 		user.decreaseCredit(1);
 
 		var lastTimeChangedDir = System.currentTimeMillis();
-		
+
 		while (!stopped) {
-			
+
 			/* update pos */
-			
+
 			var l = b.getLocation();
 			var d = b.getDirection();
 			var s = b.getSpeed();
@@ -42,7 +40,8 @@ public class RideSimulation extends Thread {
 				} else {
 					b.updateLocation(new P2d(-200, l.y()));
 				}
-			};
+			}
+			;
 			if (l.y() > 200 || l.y() < -200) {
 				b.updateDirection(new V2d(d.x(), -d.y()));
 				if (l.y() > 200) {
@@ -50,33 +49,33 @@ public class RideSimulation extends Thread {
 				} else {
 					b.updateLocation(new P2d(l.x(), -200));
 				}
-			};
-			
+			}
+			;
+
 			/* change dir randomly */
-			
+
 			var elapsedTimeSinceLastChangeDir = System.currentTimeMillis() - lastTimeChangedDir;
 			if (elapsedTimeSinceLastChangeDir > 500) {
-				double angle = Math.random()*60 - 30;
+				double angle = Math.random() * 60 - 30;
 				b.updateDirection(d.rotate(angle));
 				elapsedTimeSinceLastChangeDir = System.currentTimeMillis();
 			}
-			
-			
+
 			/* update credit */
-			
+
 			var elapsedTimeSinceLastDecredit = System.currentTimeMillis() - lastTimeDecreasedCredit;
 			if (elapsedTimeSinceLastDecredit > 1000) {
 				user.decreaseCredit(1);
 				lastTimeDecreasedCredit = System.currentTimeMillis();
 			}
-			
+
 			app.refreshView();
 
-			
 			try {
 				Thread.sleep(20);
-			} catch (Exception ex) {}
-			
+			} catch (Exception ex) {
+			}
+
 		}
 	}
 

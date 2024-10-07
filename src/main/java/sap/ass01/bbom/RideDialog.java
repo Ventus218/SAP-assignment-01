@@ -2,8 +2,7 @@ package sap.ass01.bbom;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 /**
  * Adapted from AddEBikeDialog
@@ -57,13 +56,13 @@ public class RideDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 bikeId = idEBikeField.getText();
-	            userRiding = userName.getText();
-	            cancelButton.setEnabled(false);
-	            app.startNewRide(userRiding, bikeId);
-	            dispose();
+                userRiding = userName.getText();
+                cancelButton.setEnabled(false);
+                app.startNewRide(userRiding, bikeId);
+                dispose();
             }
         });
-        
+
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -71,12 +70,12 @@ public class RideDialog extends JDialog {
             }
         });
     }
-    
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-        	RideDialog dialog = new RideDialog(null);
+            RideDialog dialog = new RideDialog(null);
             dialog.setVisible(true);
         });
     }
-    
+
 }
