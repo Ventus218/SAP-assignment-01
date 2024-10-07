@@ -8,7 +8,6 @@ public class Ride {
 	private Optional<Date> endDate;
 	private User user;
 	private EBike ebike;
-	private boolean ongoing;
 	private String id;
 	private RideSimulation rideSimulation;
 
@@ -25,7 +24,6 @@ public class Ride {
 	}
 
 	public void start(EBikeApp app) {
-		ongoing = true;
 		rideSimulation = new RideSimulation(this, user, app);
 		RideSimulationControlPanel ridingWindow = new RideSimulationControlPanel(this, app);
 		ridingWindow.display();
@@ -35,7 +33,6 @@ public class Ride {
 
 	public void end() {
 		endDate = Optional.of(new Date());
-		ongoing = false;
 		rideSimulation.stopSimulation();
 	}
 
@@ -44,7 +41,7 @@ public class Ride {
 	}
 
 	public boolean isOngoing() {
-		return this.ongoing;
+		return this.endDate.isEmpty();
 	}
 
 	public Optional<Date> getEndDate() {
