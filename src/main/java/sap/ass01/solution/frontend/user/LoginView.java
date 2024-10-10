@@ -2,7 +2,6 @@ package sap.ass01.solution.frontend.user;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 public class LoginView extends JFrame {
     private JTextField usernameField;
@@ -43,18 +42,14 @@ public class LoginView extends JFrame {
             }
         });
 
-        loginButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                showLoadingIndicator();
-                transitionToRideWindow();
-            }
+        loginButton.addActionListener(e -> {
+            showLoadingIndicator();
+            transitionToRideWindow();
         });
 
-        signUpButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                showLoadingIndicator();
-                transitionToRideWindow();
-            }
+        signUpButton.addActionListener(e -> {
+            showLoadingIndicator();
+            transitionToRideWindow();
         });
 
         add(new JLabel("Username:"));
