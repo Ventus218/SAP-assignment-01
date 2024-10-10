@@ -5,8 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class RideView {
-    private JFrame rideFrame;
+public class RideView extends JFrame {
     private JComboBox<String> bikeSelection;
     private JButton startRideButton;
     private JButton stopRideButton;
@@ -22,10 +21,10 @@ public class RideView {
         bikes.add("EBike 2");
         bikes.add("EBike 3");
 
-        rideFrame = new JFrame("EBike Selection");
-        rideFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        rideFrame.setSize(300, 250);
-        rideFrame.setLayout(new FlowLayout());
+        setTitle("EBike Selection");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 250);
+        setLayout(new FlowLayout());
 
         bikeSelection = new JComboBox<>(bikes.toArray(new String[0]));
         startRideButton = new JButton("Start Ride");
@@ -104,14 +103,14 @@ public class RideView {
         });
 
         // Add components to the frame
-        rideFrame.add(new JLabel("Select EBike:"));
-        rideFrame.add(bikeSelection);
-        rideFrame.add(startRideButton);
-        rideFrame.add(stopRideButton);
-        rideFrame.add(errorLabel);
-        rideFrame.add(loadingLabel);
+        add(new JLabel("Select EBike:"));
+        add(bikeSelection);
+        add(startRideButton);
+        add(stopRideButton);
+        add(errorLabel);
+        add(loadingLabel);
 
-        rideFrame.setVisible(true);
+        setVisible(true);
     }
 
     // Show loading indicator and disable user interaction

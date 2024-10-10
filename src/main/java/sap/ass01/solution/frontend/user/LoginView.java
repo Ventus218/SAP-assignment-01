@@ -4,8 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class LoginView {
-    private JFrame mainFrame;
+public class LoginView extends JFrame {
     private JTextField usernameField;
     private JButton loginButton;
     private JButton signUpButton;
@@ -13,10 +12,10 @@ public class LoginView {
     private JLabel loadingLabel;
 
     public LoginView() {
-        mainFrame = new JFrame("Login");
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainFrame.setSize(300, 200);
-        mainFrame.setLayout(new FlowLayout());
+        setTitle("Login");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(300, 200);
+        setLayout(new FlowLayout());
 
         usernameField = new JTextField(15);
         loginButton = new JButton("Login");
@@ -58,14 +57,14 @@ public class LoginView {
             }
         });
 
-        mainFrame.add(new JLabel("Username:"));
-        mainFrame.add(usernameField);
-        mainFrame.add(loginButton);
-        mainFrame.add(signUpButton);
-        mainFrame.add(errorLabel);
-        mainFrame.add(loadingLabel);
+        add(new JLabel("Username:"));
+        add(usernameField);
+        add(loginButton);
+        add(signUpButton);
+        add(errorLabel);
+        add(loadingLabel);
 
-        mainFrame.setVisible(true);
+        setVisible(true);
     }
 
     private void updateButtonStates() {
@@ -89,7 +88,7 @@ public class LoginView {
             protected void done() {
                 hideLoadingIndicator();
                 new RideView(); // Transition to the second view
-                mainFrame.dispose(); // Dispose the login window to free memory
+                dispose(); // Dispose the login window to free memory
             }
         };
         worker.execute();
