@@ -13,7 +13,8 @@ public class LoginView extends JFrame {
     public LoginView() {
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 200);
+        setSize(250, 200);
+        setResizable(false);
         setLayout(new FlowLayout());
 
         usernameField = new JTextField(15);

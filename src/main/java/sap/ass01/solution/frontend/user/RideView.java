@@ -22,7 +22,8 @@ public class RideView extends JFrame {
 
         setTitle("EBike Selection");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(300, 250);
+        setSize(280, 250);
+        setResizable(false);
         setLayout(new FlowLayout());
 
         bikeSelection = new JComboBox<>(bikes.toArray(new String[0]));
