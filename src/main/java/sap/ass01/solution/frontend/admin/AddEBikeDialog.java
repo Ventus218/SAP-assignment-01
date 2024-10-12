@@ -29,11 +29,11 @@ public class AddEBikeDialog extends JDialog {
     private JButton cancelButton;
     private JLabel errorLabel;
     private JLabel loadingLabel;
-    private Consumer<EBike> onEBikeCreated;
+    private final Consumer<EBike> createEBike;
 
-    public AddEBikeDialog(AdminControlPanelView owner, Consumer<EBike> onEBikeCreated) {
+    public AddEBikeDialog(AdminControlPanelView owner, Consumer<EBike> createEBike) {
         super(owner, "Adding E-Bike", true);
-        this.onEBikeCreated = onEBikeCreated;
+        this.createEBike = createEBike;
         initializeComponents();
         setupLayout();
         addEventHandlers();
@@ -81,17 +81,14 @@ public class AddEBikeDialog extends JDialog {
 
     private void addEventHandlers() {
         okButton.addActionListener(e -> {
-            // Implement OK button behavior here
             String id = idField.getText();
             String xCoord = xCoordField.getText();
             String yCoord = yCoordField.getText();
-            // TODO: create ebike on from HTTP API
             P2d location = new P2d(Integer.parseInt(xCoord), Integer.parseInt(yCoord));
             V2d direction = new V2d(1, 0);
             double speed = 0;
             int batteryLevel = 100;
-            onEBikeCreated.accept(new EBike(id, EBikeState.AVAILABLE, location, direction, speed, batteryLevel));
-            // TODO: create ebike on from HTTP API
+            createEBike.accept(new EBike(id, EBikeState.AVAILABLE, location, direction, speed, batteryLevel));
             dispose();
         });
 

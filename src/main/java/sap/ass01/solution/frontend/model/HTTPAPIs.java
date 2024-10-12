@@ -15,7 +15,7 @@ public interface HTTPAPIs {
 
     /* Users */
 
-    void getUsers(Consumer<Result<Iterable<EBike>, Exception>> handler);
+    void getUsers(Consumer<Result<Iterable<User>, Exception>> handler);
 
     void createUser(User user, Consumer<Result<Void, Exception>> handler);
 
@@ -23,7 +23,7 @@ public interface HTTPAPIs {
 
     /* Rides */
 
-    void getRides(Consumer<Result<Iterable<EBike>, Exception>> handler);
+    void getRides(Consumer<Result<Iterable<Ride>, Exception>> handler);
 
     void startRide(String userId, String eBikeId, Consumer<Result<Ride, Exception>> handler);
 
