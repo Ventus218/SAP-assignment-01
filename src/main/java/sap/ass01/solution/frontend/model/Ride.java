@@ -3,9 +3,9 @@ package sap.ass01.solution.frontend.model;
 import java.util.*;
 
 public record Ride(
+        RideId id,
         Date startedDate,
         Optional<Date> endDate,
-        User user,
-        EBike ebike,
-        String id) {
+        UserId userId,
+        EBikeId ebikeId) {
 }

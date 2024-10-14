@@ -129,7 +129,7 @@ public class AdminControlPanelView extends JFrame {
 				int x0 = (int) (dx + p.x());
 				int y0 = (int) (dy - p.y());
 				g2.drawOval(x0, y0, 20, 20);
-				g2.drawString(b.id(), x0, y0 + 35);
+				g2.drawString(b.id().id(), x0, y0 + 35);
 				g2.drawString("(" + (int) p.x() + "," + (int) p.y() + ")", x0, y0 + 50);
 			});
 

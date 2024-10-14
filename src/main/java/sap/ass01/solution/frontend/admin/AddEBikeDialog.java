@@ -88,7 +88,8 @@ public class AddEBikeDialog extends JDialog {
             V2d direction = new V2d(1, 0);
             double speed = 0;
             int batteryLevel = 100;
-            createEBike.accept(new EBike(id, EBikeState.AVAILABLE, location, direction, speed, batteryLevel));
+            createEBike
+                    .accept(new EBike(new EBikeId(id), EBikeState.AVAILABLE, location, direction, speed, batteryLevel));
             dispose();
         });
 
