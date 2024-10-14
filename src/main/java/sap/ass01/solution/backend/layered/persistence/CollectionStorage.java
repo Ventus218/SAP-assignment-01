@@ -1,7 +1,6 @@
 package sap.ass01.solution.backend.layered.persistence;
 
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
+import java.util.Collection;
 
 public interface CollectionStorage {
 
@@ -9,13 +8,13 @@ public interface CollectionStorage {
 
     public void deleteCollection(String collectionName);
 
-    public JsonArray getAllFromCollection(String collectionName);
+    public <T> Collection<T> getAllFromCollection(String collectionName, Class<T> type);
 
-    public void insert(String collectionName, String objectId, JsonObject jsonObject);
+    public <T> void insert(String collectionName, String objectId, T object);
 
-    public void update(String collectionName, String objectId, JsonObject jsonObject);
+    public <T> void update(String collectionName, String objectId, T object);
 
-    public JsonObject get(String collectionName, String objectId);
+    public <T> T get(String collectionName, String objectId, Class<T> type);
 
     public void delete(String collectionName, String objectId);
 

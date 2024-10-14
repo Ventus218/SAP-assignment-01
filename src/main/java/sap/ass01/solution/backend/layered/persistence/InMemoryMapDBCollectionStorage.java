@@ -1,7 +1,6 @@
 package sap.ass01.solution.backend.layered.persistence;
 
-import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
+import java.util.Collection;
 import sap.ass01.solution.backend.layered.database.InMemoryMapDatabase;
 
 class InMemoryMapDBCollectionStorage implements CollectionStorage {
@@ -23,12 +22,12 @@ class InMemoryMapDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public JsonArray getAllFromCollection(String collectionName) {
-        return new JsonArray(db.getMap(collectionName).values().stream().toList());
+    public <T> Collection<T> getAllFromCollection(String collectionName, Class<T> type) {
+        return db.getMap(collectionName).values().stream().map(type::cast).toList();
     }
 
     @Override
-    public void insert(String collectionName, String objectId, JsonObject jsonObject) {
+    public <T> void insert(String collectionName, String objectId, T jsonObject) {
         var map = db.getMap(collectionName);
         if (map.containsKey(objectId)) {
             throw new IllegalArgumentException("An object with id " + objectId + " already exists");
@@ -37,7 +36,7 @@ class InMemoryMapDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public void update(String collectionName, String objectId, JsonObject jsonObject) {
+    public <T> void update(String collectionName, String objectId, T jsonObject) {
         var map = db.getMap(collectionName);
         if (!map.containsKey(objectId)) {
             throw new IllegalArgumentException("The object with id " + objectId + " does not exist");
@@ -46,12 +45,12 @@ class InMemoryMapDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public JsonObject get(String collectionName, String objectId) {
+    public <T> T get(String collectionName, String objectId, Class<T> type) {
         var map = db.getMap(collectionName);
         if (!map.containsKey(objectId)) {
             throw new IllegalArgumentException("The object with id " + objectId + " does not exist");
         }
-        return map.get(objectId);
+        return type.cast(map.get(objectId));
     }
 
     @Override

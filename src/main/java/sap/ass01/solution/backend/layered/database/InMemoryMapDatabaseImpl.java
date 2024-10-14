@@ -1,18 +1,17 @@
 package sap.ass01.solution.backend.layered.database;
 
 import java.util.*;
-import io.vertx.core.json.JsonObject;
 
 public class InMemoryMapDatabaseImpl implements InMemoryMapDatabase {
 
-    private final Map<String, Map<String, JsonObject>> maps = new HashMap<>();
+    private final Map<String, Map<String, Object>> maps = new HashMap<>();
 
     @Override
-    public Map<String, JsonObject> createMap(String mapName) {
+    public Map<String, Object> createMap(String mapName) {
         if (maps.containsKey(mapName)) {
             throw new IllegalStateException("A map with name " + mapName + " already exists.");
         }
-        Map<String, JsonObject> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         maps.put(mapName, map);
         return map;
     }
@@ -26,7 +25,7 @@ public class InMemoryMapDatabaseImpl implements InMemoryMapDatabase {
     }
 
     @Override
-    public Map<String, JsonObject> getMap(String mapName) {
+    public Map<String, Object> getMap(String mapName) {
         if (!maps.containsKey(mapName)) {
             throw new IllegalStateException("A map with name " + mapName + " does not exist.");
         }

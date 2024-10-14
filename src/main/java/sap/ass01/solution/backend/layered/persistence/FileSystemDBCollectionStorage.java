@@ -2,7 +2,7 @@ package sap.ass01.solution.backend.layered.persistence;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.stream.Collectors;
+import java.util.Collection;
 import io.vertx.core.json.*;
 import sap.ass01.solution.backend.layered.database.FileSystemDatabase;
 
@@ -45,27 +45,21 @@ class FileSystemDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public JsonArray getAllFromCollection(String collectionName) {
-        var file = db.getFile(collectionFileName(collectionName));
-        String fileContent;
-        try {
-            fileContent = new String(Files.readAllBytes(file.toPath()));
-        } catch (IOException e) {
-            throw new RuntimeException("Something went wrong while reading file " + collectionFileName(collectionName),
-                    e);
-        }
-        return new JsonArray(fileContent);
+    public <T> Collection<T> getAllFromCollection(String collectionName, Class<T> type) {
+        var jsonArray = getJsonArrayFromCollection(collectionName);
+        return jsonArray.stream().map(o -> ((JsonObject) o).getJsonObject("object"))
+                .map(o -> o.mapTo(type)).toList();
     }
 
     @Override
-    public void insert(String collectionName, String objectId, JsonObject jsonObject) {
-        if (getAllFromCollection(collectionName).stream()
+    public <T> void insert(String collectionName, String objectId, T jsonObject) {
+        if (getJsonArrayFromCollection(collectionName).stream()
                 .anyMatch(o -> ((JsonObject) o).getString("id").equals(objectId))) {
             throw new IllegalStateException("An object with id " + objectId + " already exists.");
         }
 
         JsonObject obj = new JsonObject().put("id", objectId).put("object", jsonObject);
-        JsonArray newJsonArray = getAllFromCollection(collectionName).add(obj);
+        JsonArray newJsonArray = getJsonArrayFromCollection(collectionName).add(obj);
         File file = db.getFile(collectionFileName(collectionName));
         try {
             Files.write(file.toPath(), newJsonArray.encode().getBytes());
@@ -79,15 +73,15 @@ class FileSystemDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public void update(String collectionName, String objectId, JsonObject jsonObject) {
-        if (!getAllFromCollection(collectionName).stream()
+    public <T> void update(String collectionName, String objectId, T jsonObject) {
+        if (!getJsonArrayFromCollection(collectionName).stream()
                 .anyMatch(o -> ((JsonObject) o).getString("id").equals(objectId))) {
             throw new IllegalStateException("An object with id " + objectId + " does not exist.");
         }
 
         JsonObject obj = new JsonObject().put("id", objectId).put("object", jsonObject);
-        var listWithoutOldObject = getAllFromCollection(collectionName).stream()
-                .filter(o -> !((JsonObject) o).getString("id").equals(objectId)).collect(Collectors.toList());
+        var listWithoutOldObject = getJsonArrayFromCollection(collectionName).stream()
+                .filter(o -> !((JsonObject) o).getString("id").equals(objectId)).toList();
         var arrayWithoutOldObject = new JsonArray(listWithoutOldObject);
         var newJsonArray = arrayWithoutOldObject.add(obj);
         File file = db.getFile(collectionFileName(collectionName));
@@ -102,25 +96,25 @@ class FileSystemDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public JsonObject get(String collectionName, String objectId) {
-        var optional = getAllFromCollection(collectionName).stream()
+    public <T> T get(String collectionName, String objectId, Class<T> type) {
+        var optional = getJsonArrayFromCollection(collectionName).stream()
                 .filter(o -> ((JsonObject) o).getString("id").equals(objectId))
                 .findFirst();
         if (optional.isEmpty()) {
             throw new IllegalStateException("An object with id " + objectId + " does not exist.");
         }
-        return ((JsonObject) optional.get()).getJsonObject("object");
+        return ((JsonObject) optional.get()).getJsonObject("object").mapTo(type);
     }
 
     @Override
     public void delete(String collectionName, String objectId) {
-        if (!getAllFromCollection(collectionName).stream()
+        if (!getJsonArrayFromCollection(collectionName).stream()
                 .anyMatch(o -> ((JsonObject) o).getString("id").equals(objectId))) {
             throw new IllegalStateException("An object with id " + objectId + " does not exist.");
         }
 
-        var listWithoutOldObject = getAllFromCollection(collectionName).stream()
-                .filter(o -> !((JsonObject) o).getString("id").equals(objectId)).collect(Collectors.toList());
+        var listWithoutOldObject = getJsonArrayFromCollection(collectionName).stream()
+                .filter(o -> !((JsonObject) o).getString("id").equals(objectId)).toList();
         var newJsonArray = new JsonArray(listWithoutOldObject);
         File file = db.getFile(collectionFileName(collectionName));
         try {
@@ -133,4 +127,15 @@ class FileSystemDBCollectionStorage implements CollectionStorage {
         }
     }
 
+    private JsonArray getJsonArrayFromCollection(String collectionName) {
+        var file = db.getFile(collectionFileName(collectionName));
+        String fileContent;
+        try {
+            fileContent = new String(Files.readAllBytes(file.toPath()));
+        } catch (IOException e) {
+            throw new RuntimeException("Something went wrong while reading file " + collectionFileName(collectionName),
+                    e);
+        }
+        return new JsonArray(fileContent);
+    }
 }

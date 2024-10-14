@@ -1,7 +1,6 @@
 package sap.ass01.solution.backend.layered.database;
 
 import java.util.*;
-import io.vertx.core.json.JsonObject;
 
 public interface InMemoryMapDatabase {
 
@@ -10,7 +9,7 @@ public interface InMemoryMapDatabase {
      * @param mapName
      * @return the new map
      */
-    public Map<String, JsonObject> createMap(String mapName);
+    public Map<String, Object> createMap(String mapName);
 
     /**
      * @throws IllegalStateException if a map with the given name does not exist
@@ -23,6 +22,6 @@ public interface InMemoryMapDatabase {
      * @param mapName
      * @return the searched map
      */
-    public Map<String, JsonObject> getMap(String mapName);
+    public Map<String, Object> getMap(String mapName);
 
 }
