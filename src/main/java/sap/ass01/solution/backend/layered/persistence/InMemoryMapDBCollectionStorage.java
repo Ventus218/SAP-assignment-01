@@ -29,7 +29,11 @@ class InMemoryMapDBCollectionStorage implements CollectionStorage {
 
     @Override
     public void insert(String collectionName, String objectId, JsonObject jsonObject) {
-        db.getMap(collectionName).put(objectId, jsonObject);
+        var map = db.getMap(collectionName);
+        if (map.containsKey(objectId)) {
+            throw new IllegalArgumentException("An object with id " + objectId + " already exists");
+        }
+        map.put(objectId, jsonObject);
     }
 
     @Override

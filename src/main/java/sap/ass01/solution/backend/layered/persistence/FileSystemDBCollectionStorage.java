@@ -109,7 +109,7 @@ class FileSystemDBCollectionStorage implements CollectionStorage {
         if (optional.isEmpty()) {
             throw new IllegalStateException("An object with id " + objectId + " does not exist.");
         }
-        return (JsonObject) optional.get();
+        return ((JsonObject) optional.get()).getJsonObject("object");
     }
 
     @Override

@@ -3,7 +3,7 @@ package sap.ass01.solution.backend.layered.database;
 import java.io.File;
 import java.io.IOException;
 
-class FileSystemDatabaseImpl implements FileSystemDatabase {
+public class FileSystemDatabaseImpl implements FileSystemDatabase {
 
     private final File storageDir;
 
