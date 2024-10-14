@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchRule;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
 public class LayeredArchTests {
     /**
@@ -19,26 +19,17 @@ public class LayeredArchTests {
         List<ArchRule> rules = new ArrayList<>();
         // TODO: Uncomment after writing presentation classes
         // rules.add(
-        // noClasses().that().resideInAPackage("..presentation..")
-        // .should().dependOnClassesThat().resideInAnyPackage(
-        // "..persistence..",
-        // "..database.."));
+        //         classes().that().resideInAPackage("..presentation..")
+        //                 .should().onlyBeAccessed().byAnyPackage("..presentation.."));
         rules.add(
-                noClasses().that().resideInAPackage("..businesslogic..")
-                        .should().dependOnClassesThat().resideInAnyPackage(
-                                "..presentation..",
-                                "..database.."));
+                classes().that().resideInAPackage("..businesslogic..")
+                        .should().onlyBeAccessed().byAnyPackage("..businesslogic..", "..presentation.."));
         rules.add(
-                noClasses().that().resideInAPackage("..persistence..")
-                        .should().dependOnClassesThat().resideInAnyPackage(
-                                "..presentation..",
-                                "..businesslogic.."));
+                classes().that().resideInAPackage("..persistence..")
+                        .should().onlyBeAccessed().byAnyPackage("..persistence..", "..businesslogic.."));
         rules.add(
-                noClasses().that().resideInAPackage("..database..")
-                        .should().dependOnClassesThat().resideInAnyPackage(
-                                "..presentation..",
-                                "..businesslogic..",
-                                "persistence"));
+                classes().that().resideInAPackage("..database..")
+                        .should().onlyBeAccessed().byAnyPackage("..database..", "..persistence.."));
 
         rules.forEach(r -> r.check(importedClasses));
     }
