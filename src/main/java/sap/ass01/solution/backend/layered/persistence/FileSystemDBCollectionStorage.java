@@ -96,14 +96,11 @@ class FileSystemDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public <T> T find(String collectionName, String objectId, Class<T> type) {
+    public <T> Optional<T> find(String collectionName, String objectId, Class<T> type) {
         var optional = getJsonArrayFromCollection(collectionName).stream()
                 .filter(o -> ((JsonObject) o).getString("id").equals(objectId))
                 .findFirst();
-        if (optional.isEmpty()) {
-            throw new IllegalStateException("An object with id " + objectId + " does not exist.");
-        }
-        return ((JsonObject) optional.get()).getJsonObject("object").mapTo(type);
+        return optional.map(o -> ((JsonObject) o)).map(o -> o.getJsonObject("object").mapTo(type));
     }
 
     @Override

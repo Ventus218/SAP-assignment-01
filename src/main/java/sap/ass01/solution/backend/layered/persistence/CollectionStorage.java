@@ -14,7 +14,7 @@ public interface CollectionStorage {
 
     public <T> void update(String collectionName, String objectId, T object);
 
-    public <T> T find(String collectionName, String objectId, Class<T> type);
+    public <T> Optional<T> find(String collectionName, String objectId, Class<T> type);
 
     public void delete(String collectionName, String objectId);
 
