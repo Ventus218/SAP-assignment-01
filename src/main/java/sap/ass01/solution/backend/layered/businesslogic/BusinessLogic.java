@@ -1,7 +1,7 @@
 package sap.ass01.solution.backend.layered.businesslogic;
 
 import java.util.*;
-import sap.ass01.solution.backend.layered.businesslogic.exceptions.NotFoundException;
+import sap.ass01.solution.backend.layered.businesslogic.exceptions.*;
 import sap.ass01.solution.backend.layered.businesslogic.model.*;
 import sap.ass01.solution.backend.layered.businesslogic.model.dto.*;
 
@@ -27,8 +27,9 @@ public interface BusinessLogic {
 
     public Optional<Ride> getRide(RideId rideId);
 
-    public Ride startRide(StartRideDTO startRideDTO) throws NotFoundException;
+    public Ride startRide(StartRideDTO startRideDTO)
+            throws NotFoundException, UserAlreadyOnRideException, EBikeAlreadyOnRideException;
 
-    public Ride endRide(EndRideDTO endRideDTO) throws NotFoundException;
+    public Ride endRide(EndRideDTO endRideDTO) throws NotFoundException, RideAlreadyEndedException;
 
 }
