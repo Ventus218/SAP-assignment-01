@@ -104,10 +104,10 @@ class FileSystemDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public void delete(String collectionName, String objectId) {
+    public void delete(String collectionName, String objectId) throws ItemNotPersistedException {
         if (!getJsonArrayFromCollection(collectionName).stream()
                 .anyMatch(o -> ((JsonObject) o).getString("id").equals(objectId))) {
-            throw new IllegalStateException("An object with id " + objectId + " does not exist.");
+            throw new ItemNotPersistedException("An object with id " + objectId + " does not exist.");
         }
 
         var listWithoutOldObject = getJsonArrayFromCollection(collectionName).stream()

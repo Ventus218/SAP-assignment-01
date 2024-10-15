@@ -52,10 +52,10 @@ class InMemoryMapDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public void delete(String collectionName, String objectId) {
+    public void delete(String collectionName, String objectId) throws ItemNotPersistedException {
         var map = db.getMap(collectionName);
         if (!map.containsKey(objectId)) {
-            throw new IllegalArgumentException("The object with id " + objectId + " does not exist");
+            throw new ItemNotPersistedException("The object with id " + objectId + " does not exist");
         }
         map.remove(objectId);
     }
