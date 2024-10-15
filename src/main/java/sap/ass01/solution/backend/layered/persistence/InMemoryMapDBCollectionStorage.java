@@ -36,10 +36,10 @@ class InMemoryMapDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public <T> void update(String collectionName, String objectId, T jsonObject) {
+    public <T> void update(String collectionName, String objectId, T jsonObject) throws ItemNotPersistedException {
         var map = db.getMap(collectionName);
         if (!map.containsKey(objectId)) {
-            throw new IllegalArgumentException("The object with id " + objectId + " does not exist");
+            throw new ItemNotPersistedException("The object with id " + objectId + " does not exist");
         }
         map.put(objectId, jsonObject);
     }

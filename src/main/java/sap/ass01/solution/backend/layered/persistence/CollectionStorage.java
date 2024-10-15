@@ -12,10 +12,10 @@ public interface CollectionStorage {
 
     public <T> void insert(String collectionName, String objectId, T object) throws DuplicateIdException;
 
-    public <T> void update(String collectionName, String objectId, T object);
+    public <T> void update(String collectionName, String objectId, T object) throws ItemNotPersistedException;
 
     public <T> Optional<T> find(String collectionName, String objectId, Class<T> type);
 
-    public void delete(String collectionName, String objectId);
+    public void delete(String collectionName, String objectId) throws ItemNotPersistedException;
 
 }
