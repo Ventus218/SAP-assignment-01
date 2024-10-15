@@ -1,6 +1,7 @@
 package sap.ass01.solution.backend.layered.businesslogic;
 
-import java.util.Collection;
+import java.util.*;
+import sap.ass01.solution.backend.layered.businesslogic.exceptions.NotFoundException;
 import sap.ass01.solution.backend.layered.businesslogic.model.*;
 import sap.ass01.solution.backend.layered.businesslogic.model.dto.*;
 
@@ -8,26 +9,26 @@ public interface BusinessLogic {
 
     public Collection<EBike> getEBikes();
 
-    public void createEBike(CreateEBikeDTO createEBikeDTO);
+    public EBike createEBike(CreateEBikeDTO createEBikeDTO) throws IllegalArgumentException;
 
-    public EBike getEBike(EBikeId ebikeId);
+    public Optional<EBike> getEBike(EBikeId ebikeId);
 
-    public void deleteEBike(EBikeId ebikeId);
+    public void deleteEBike(EBikeId ebikeId) throws NotFoundException;
 
     public Collection<User> getUsers();
 
-    public void signup(CreateUserDTO createUserDTO);
+    public User signup(CreateUserDTO createUserDTO) throws IllegalArgumentException;
 
-    public void login(UserId userId);
+    public User login(UserId userId) throws NotFoundException;
 
-    public User getUser(UserId userId);
+    public Optional<User> getUser(UserId userId);
 
     public Collection<Ride> getRides();
 
-    public Ride getRide(RideId rideId);
+    public Optional<Ride> getRide(RideId rideId);
 
-    public void startRide(StartRideDTO startRideDTO);
+    public Ride startRide(StartRideDTO startRideDTO) throws NotFoundException;
 
-    public void endRide(EndRideDTO endRideDTO);
+    public Ride endRide(EndRideDTO endRideDTO) throws NotFoundException;
 
 }
