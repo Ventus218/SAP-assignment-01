@@ -1,6 +1,6 @@
 package sap.ass01.solution.backend.layered.persistence;
 
-import java.util.Collection;
+import java.util.*;
 import sap.ass01.solution.backend.layered.database.InMemoryMapDatabase;
 
 class InMemoryMapDBCollectionStorage implements CollectionStorage {
@@ -27,10 +27,10 @@ class InMemoryMapDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public <T> void insert(String collectionName, String objectId, T jsonObject) {
+    public <T> void insert(String collectionName, String objectId, T jsonObject) throws DuplicateIdException {
         var map = db.getMap(collectionName);
         if (map.containsKey(objectId)) {
-            throw new IllegalArgumentException("An object with id " + objectId + " already exists");
+            throw new DuplicateIdException("An object with id " + objectId + " already exists");
         }
         map.put(objectId, jsonObject);
     }

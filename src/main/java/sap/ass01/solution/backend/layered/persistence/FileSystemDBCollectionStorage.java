@@ -2,7 +2,7 @@ package sap.ass01.solution.backend.layered.persistence;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.Collection;
+import java.util.*;
 import io.vertx.core.json.*;
 import sap.ass01.solution.backend.layered.database.FileSystemDatabase;
 
@@ -52,10 +52,10 @@ class FileSystemDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public <T> void insert(String collectionName, String objectId, T jsonObject) {
+    public <T> void insert(String collectionName, String objectId, T jsonObject) throws DuplicateIdException {
         if (getJsonArrayFromCollection(collectionName).stream()
                 .anyMatch(o -> ((JsonObject) o).getString("id").equals(objectId))) {
-            throw new IllegalStateException("An object with id " + objectId + " already exists.");
+            throw new DuplicateIdException("An object with id " + objectId + " already exists.");
         }
 
         JsonObject obj = new JsonObject().put("id", objectId).put("object", jsonObject);

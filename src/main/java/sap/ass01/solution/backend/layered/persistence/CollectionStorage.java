@@ -1,6 +1,6 @@
 package sap.ass01.solution.backend.layered.persistence;
 
-import java.util.Collection;
+import java.util.*;
 
 public interface CollectionStorage {
 
@@ -10,7 +10,7 @@ public interface CollectionStorage {
 
     public <T> Collection<T> getAllFromCollection(String collectionName, Class<T> type);
 
-    public <T> void insert(String collectionName, String objectId, T object);
+    public <T> void insert(String collectionName, String objectId, T object) throws DuplicateIdException;
 
     public <T> void update(String collectionName, String objectId, T object);
 
