@@ -5,6 +5,8 @@ import java.nio.file.Files;
 import java.util.*;
 import io.vertx.core.json.*;
 import sap.ass01.solution.backend.layered.database.FileSystemDatabase;
+import sap.ass01.solution.backend.layered.persistence.exceptions.DuplicateIdException;
+import sap.ass01.solution.backend.layered.persistence.exceptions.ItemNotPersistedException;
 
 class FileSystemDBCollectionStorage implements CollectionStorage {
 

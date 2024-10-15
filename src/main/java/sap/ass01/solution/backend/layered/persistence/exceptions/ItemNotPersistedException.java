@@ -1,4 +1,4 @@
-package sap.ass01.solution.backend.layered.persistence;
+package sap.ass01.solution.backend.layered.persistence.exceptions;
 
 public class ItemNotPersistedException extends Exception {
 

@@ -2,6 +2,9 @@ package sap.ass01.solution.backend.layered.persistence;
 
 import java.util.*;
 
+import sap.ass01.solution.backend.layered.persistence.exceptions.DuplicateIdException;
+import sap.ass01.solution.backend.layered.persistence.exceptions.ItemNotPersistedException;
+
 public interface CollectionStorage {
 
     public void createCollection(String collectionName);
