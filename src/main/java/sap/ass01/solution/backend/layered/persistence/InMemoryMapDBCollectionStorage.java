@@ -45,7 +45,7 @@ class InMemoryMapDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public <T> T get(String collectionName, String objectId, Class<T> type) {
+    public <T> T find(String collectionName, String objectId, Class<T> type) {
         var map = db.getMap(collectionName);
         if (!map.containsKey(objectId)) {
             throw new IllegalArgumentException("The object with id " + objectId + " does not exist");

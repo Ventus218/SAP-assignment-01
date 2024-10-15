@@ -96,7 +96,7 @@ class FileSystemDBCollectionStorage implements CollectionStorage {
     }
 
     @Override
-    public <T> T get(String collectionName, String objectId, Class<T> type) {
+    public <T> T find(String collectionName, String objectId, Class<T> type) {
         var optional = getJsonArrayFromCollection(collectionName).stream()
                 .filter(o -> ((JsonObject) o).getString("id").equals(objectId))
                 .findFirst();

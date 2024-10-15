@@ -20,14 +20,14 @@ public class InMemoryMapDBCollectionStorageTests {
 
         TestRecord record = new TestRecord(10, Optional.of("ciao"));
         storage.insert(recordsCollectionName, "1", record);
-        TestRecord r = storage.get(recordsCollectionName, "1", TestRecord.class);
+        TestRecord r = storage.find(recordsCollectionName, "1", TestRecord.class);
         System.out.println(r);
 
         TestClass class1 = new TestClass(10, Optional.of("ciao"), record);
         TestClass class2 = new TestClass(11, Optional.empty(), record);
         storage.insert(classesCollectionName, "1", class1);
         storage.insert(classesCollectionName, "2", class2);
-        TestClass cla = storage.get(classesCollectionName, "1", TestClass.class);
+        TestClass cla = storage.find(classesCollectionName, "1", TestClass.class);
         System.out.println(cla);
 
         var allClasses = storage.getAllFromCollection(classesCollectionName, TestClass.class);
