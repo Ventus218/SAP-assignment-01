@@ -5,7 +5,7 @@ import sap.ass01.solution.backend.layered.database.InMemoryMapDatabase;
 import sap.ass01.solution.backend.layered.persistence.exceptions.DuplicateIdException;
 import sap.ass01.solution.backend.layered.persistence.exceptions.ItemNotPersistedException;
 
-class InMemoryMapDBCollectionStorage implements CollectionStorage {
+public class InMemoryMapDBCollectionStorage implements CollectionStorage {
 
     private final InMemoryMapDatabase db;
 

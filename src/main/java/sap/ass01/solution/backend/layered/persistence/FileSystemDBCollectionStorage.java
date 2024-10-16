@@ -8,7 +8,7 @@ import sap.ass01.solution.backend.layered.database.FileSystemDatabase;
 import sap.ass01.solution.backend.layered.persistence.exceptions.DuplicateIdException;
 import sap.ass01.solution.backend.layered.persistence.exceptions.ItemNotPersistedException;
 
-class FileSystemDBCollectionStorage implements CollectionStorage {
+public class FileSystemDBCollectionStorage implements CollectionStorage {
 
     /*
      * --- ABOUT FILE FORMAT ---
