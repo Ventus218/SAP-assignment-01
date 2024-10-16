@@ -19,6 +19,9 @@ public interface BusinessLogic {
 
     public void deleteEBike(EBikeId ebikeId) throws NotFoundException, InterruptedException;
 
+    public EBike updateEBike(EBikeId ebikeId, UpdateEBikeDTO updateEBikeDTO)
+            throws NotFoundException, InterruptedException;
+
     public Collection<User> getUsers() throws InterruptedException;
 
     public User signup(CreateUserDTO createUserDTO) throws IllegalArgumentException, InterruptedException;
@@ -26,6 +29,8 @@ public interface BusinessLogic {
     public User login(UserId userId) throws NotFoundException, InterruptedException;
 
     public Optional<User> getUser(UserId userId) throws InterruptedException;
+
+    public User updateUser(UserId id, UpdateUserDTO updateUserDTO) throws NotFoundException, InterruptedException;
 
     public Collection<Ride> getRides() throws InterruptedException;
 

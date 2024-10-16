@@ -95,6 +95,27 @@ public class BusinessLogicImpl implements BusinessLogic {
     }
 
     @Override
+    public EBike updateEBike(EBikeId ebikeId, UpdateEBikeDTO updateEBikeDTO)
+            throws NotFoundException, InterruptedException {
+        synchronized (transactionLock) {
+            while (isInTransaction) {
+                queue.await();
+            }
+            // TODO: what about bike state???
+            EBike bike = getEBike(ebikeId).orElseThrow(() -> new NotFoundException());
+            EBike newBike = new EBike(ebikeId, bike.state(), updateEBikeDTO.loc(), updateEBikeDTO.direction(),
+                    updateEBikeDTO.speed(), updateEBikeDTO.batteryLevel());
+            try {
+                storage.update(BIKES, ebikeId.id(), newBike);
+            } catch (ItemNotPersistedException e) {
+                throw new FatalErrorException("Unexpected update of bike failed", e);
+            }
+            return newBike;
+        }
+
+    }
+
+    @Override
     public Collection<User> getUsers() throws InterruptedException {
         synchronized (transactionLock) {
             while (isInTransaction) {
@@ -138,6 +159,24 @@ public class BusinessLogicImpl implements BusinessLogic {
                 queue.await();
             }
             return storage.find(USERS, userId.id(), User.class);
+        }
+    }
+
+    @Override
+    public User updateUser(UserId id, UpdateUserDTO updateUserDTO) throws NotFoundException, InterruptedException {
+        synchronized (transactionLock) {
+            while (isInTransaction) {
+                queue.await();
+            }
+            // Ensuring user exists
+            getUser(id).orElseThrow(() -> new NotFoundException());
+            User newUser = new User(id, updateUserDTO.credit());
+            try {
+                storage.update(USERS, id.id(), newUser);
+            } catch (ItemNotPersistedException e) {
+                throw new FatalErrorException("Unexpected update of user failed", e);
+            }
+            return newUser;
         }
     }
 
