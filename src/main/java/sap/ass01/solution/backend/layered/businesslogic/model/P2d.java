@@ -6,22 +6,7 @@ package sap.ass01.solution.backend.layered.businesslogic.model;
  * objects are completely state-less
  *
  */
-public class P2d implements java.io.Serializable {
-
-    private double x, y;
-
-    public P2d(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public double x() {
-        return x;
-    }
-
-    public double y() {
-        return y;
-    }
+public record P2d(double x, double y) {
 
     public P2d sum(V2d v) {
         return new P2d(x + v.x(), y + v.y());
