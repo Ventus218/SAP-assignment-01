@@ -7,29 +7,34 @@ import sap.ass01.solution.backend.layered.businesslogic.model.dto.*;
 
 public interface BusinessLogic {
 
-    public Collection<EBike> getEBikes();
+    public void startTransaction() throws InterruptedException;
 
-    public EBike createEBike(CreateEBikeDTO createEBikeDTO) throws IllegalArgumentException;
+    public void endTransaction();
 
-    public Optional<EBike> getEBike(EBikeId ebikeId);
+    public Collection<EBike> getEBikes() throws InterruptedException;
 
-    public void deleteEBike(EBikeId ebikeId) throws NotFoundException;
+    public EBike createEBike(CreateEBikeDTO createEBikeDTO) throws IllegalArgumentException, InterruptedException;
 
-    public Collection<User> getUsers();
+    public Optional<EBike> getEBike(EBikeId ebikeId) throws InterruptedException;
 
-    public User signup(CreateUserDTO createUserDTO) throws IllegalArgumentException;
+    public void deleteEBike(EBikeId ebikeId) throws NotFoundException, InterruptedException;
 
-    public User login(UserId userId) throws NotFoundException;
+    public Collection<User> getUsers() throws InterruptedException;
 
-    public Optional<User> getUser(UserId userId);
+    public User signup(CreateUserDTO createUserDTO) throws IllegalArgumentException, InterruptedException;
 
-    public Collection<Ride> getRides();
+    public User login(UserId userId) throws NotFoundException, InterruptedException;
 
-    public Optional<Ride> getRide(RideId rideId);
+    public Optional<User> getUser(UserId userId) throws InterruptedException;
+
+    public Collection<Ride> getRides() throws InterruptedException;
+
+    public Optional<Ride> getRide(RideId rideId) throws InterruptedException;
 
     public Ride startRide(StartRideDTO startRideDTO)
-            throws NotFoundException, UserAlreadyOnRideException, EBikeAlreadyOnRideException;
+            throws NotFoundException, UserAlreadyOnRideException, EBikeAlreadyOnRideException, InterruptedException;
 
-    public Ride endRide(EndRideDTO endRideDTO) throws NotFoundException, RideAlreadyEndedException;
+    public Ride endRide(EndRideDTO endRideDTO)
+            throws NotFoundException, RideAlreadyEndedException, InterruptedException;
 
 }
