@@ -29,7 +29,7 @@ public class BusinessLogicImpl implements BusinessLogic {
         }
     }
 
-    public void startTransaction() throws InterruptedException {
+    public void startTransaction() {
         synchronized (transactionLock) {
             isInTransaction = true;
         }
@@ -43,20 +43,28 @@ public class BusinessLogicImpl implements BusinessLogic {
     }
 
     @Override
-    public Collection<EBike> getEBikes() throws InterruptedException {
+    public Collection<EBike> getEBikes() {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             return storage.getAllFromCollection(BIKES, EBike.class);
         }
     }
 
     @Override
-    public EBike createEBike(CreateEBikeDTO createEBikeDTO) throws IllegalArgumentException, InterruptedException {
+    public EBike createEBike(CreateEBikeDTO createEBikeDTO) throws IllegalArgumentException {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             var ebike = new EBike(createEBikeDTO.id(), EBikeState.AVAILABLE, createEBikeDTO.loc(),
                     createEBikeDTO.direction(),
@@ -71,20 +79,28 @@ public class BusinessLogicImpl implements BusinessLogic {
     }
 
     @Override
-    public Optional<EBike> getEBike(EBikeId ebikeId) throws InterruptedException {
+    public Optional<EBike> getEBike(EBikeId ebikeId) {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             return storage.find(BIKES, ebikeId.id(), EBike.class);
         }
     }
 
     @Override
-    public void deleteEBike(EBikeId ebikeId) throws NotFoundException, InterruptedException {
+    public void deleteEBike(EBikeId ebikeId) throws NotFoundException {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             try {
                 storage.delete(BIKES, ebikeId.id());
@@ -96,10 +112,14 @@ public class BusinessLogicImpl implements BusinessLogic {
 
     @Override
     public EBike updateEBike(EBikeId ebikeId, UpdateEBikeDTO updateEBikeDTO)
-            throws NotFoundException, InterruptedException {
+            throws NotFoundException {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             // TODO: what about bike state???
             EBike bike = getEBike(ebikeId).orElseThrow(() -> new NotFoundException());
@@ -116,20 +136,28 @@ public class BusinessLogicImpl implements BusinessLogic {
     }
 
     @Override
-    public Collection<User> getUsers() throws InterruptedException {
+    public Collection<User> getUsers() {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             return storage.getAllFromCollection(USERS, User.class);
         }
     }
 
     @Override
-    public User signup(CreateUserDTO createUserDTO) throws IllegalArgumentException, InterruptedException {
+    public User signup(CreateUserDTO createUserDTO) throws IllegalArgumentException {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             User user = new User(createUserDTO.id(), 100);
             try {
@@ -142,10 +170,14 @@ public class BusinessLogicImpl implements BusinessLogic {
     }
 
     @Override
-    public User login(UserId userId) throws NotFoundException, InterruptedException {
+    public User login(UserId userId) throws NotFoundException {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             var user = storage.find(USERS, userId.id(), User.class);
             return user.orElseThrow(() -> new NotFoundException());
@@ -153,20 +185,28 @@ public class BusinessLogicImpl implements BusinessLogic {
     }
 
     @Override
-    public Optional<User> getUser(UserId userId) throws InterruptedException {
+    public Optional<User> getUser(UserId userId) {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             return storage.find(USERS, userId.id(), User.class);
         }
     }
 
     @Override
-    public User updateUser(UserId id, UpdateUserDTO updateUserDTO) throws NotFoundException, InterruptedException {
+    public User updateUser(UserId id, UpdateUserDTO updateUserDTO) throws NotFoundException {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             // Ensuring user exists
             getUser(id).orElseThrow(() -> new NotFoundException());
@@ -181,20 +221,28 @@ public class BusinessLogicImpl implements BusinessLogic {
     }
 
     @Override
-    public Collection<Ride> getRides() throws InterruptedException {
+    public Collection<Ride> getRides() {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             return storage.getAllFromCollection(RIDES, Ride.class);
         }
     }
 
     @Override
-    public Optional<Ride> getRide(RideId rideId) throws InterruptedException {
+    public Optional<Ride> getRide(RideId rideId) {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             return storage.find(RIDES, rideId.id(), Ride.class);
         }
@@ -202,10 +250,14 @@ public class BusinessLogicImpl implements BusinessLogic {
 
     @Override
     public Ride startRide(StartRideDTO startRideDTO)
-            throws NotFoundException, UserAlreadyOnRideException, EBikeAlreadyOnRideException, InterruptedException {
+            throws NotFoundException, UserAlreadyOnRideException, EBikeAlreadyOnRideException {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             if (storage.getAllFromCollection(RIDES, Ride.class).stream()
                     .anyMatch(r -> r.userId().equals(startRideDTO.userId()))) {
@@ -241,10 +293,14 @@ public class BusinessLogicImpl implements BusinessLogic {
 
     @Override
     public Ride endRide(EndRideDTO endRideDTO)
-            throws NotFoundException, RideAlreadyEndedException, InterruptedException {
+            throws NotFoundException, RideAlreadyEndedException {
         synchronized (transactionLock) {
             while (isInTransaction) {
-                queue.await();
+                try {
+                    queue.await();
+                } catch (InterruptedException e) {
+                    throw new OperationFailedException(e);
+                }
             }
             var optional = storage.find(RIDES, endRideDTO.rideId().id(), Ride.class);
             if (optional.isEmpty()) {

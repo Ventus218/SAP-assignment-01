@@ -7,39 +7,37 @@ import sap.ass01.solution.backend.layered.businesslogic.model.dto.*;
 
 public interface BusinessLogic {
 
-    public void startTransaction() throws InterruptedException;
+    public void startTransaction();
 
     public void endTransaction();
 
-    public Collection<EBike> getEBikes() throws InterruptedException;
+    public Collection<EBike> getEBikes();
 
-    public EBike createEBike(CreateEBikeDTO createEBikeDTO) throws IllegalArgumentException, InterruptedException;
+    public EBike createEBike(CreateEBikeDTO createEBikeDTO) throws IllegalArgumentException;
 
-    public Optional<EBike> getEBike(EBikeId ebikeId) throws InterruptedException;
+    public Optional<EBike> getEBike(EBikeId ebikeId);
 
-    public void deleteEBike(EBikeId ebikeId) throws NotFoundException, InterruptedException;
+    public void deleteEBike(EBikeId ebikeId) throws NotFoundException;
 
-    public EBike updateEBike(EBikeId ebikeId, UpdateEBikeDTO updateEBikeDTO)
-            throws NotFoundException, InterruptedException;
+    public EBike updateEBike(EBikeId ebikeId, UpdateEBikeDTO updateEBikeDTO) throws NotFoundException;
 
-    public Collection<User> getUsers() throws InterruptedException;
+    public Collection<User> getUsers();
 
-    public User signup(CreateUserDTO createUserDTO) throws IllegalArgumentException, InterruptedException;
+    public User signup(CreateUserDTO createUserDTO) throws IllegalArgumentException;
 
-    public User login(UserId userId) throws NotFoundException, InterruptedException;
+    public User login(UserId userId) throws NotFoundException;
 
-    public Optional<User> getUser(UserId userId) throws InterruptedException;
+    public Optional<User> getUser(UserId userId);
 
-    public User updateUser(UserId id, UpdateUserDTO updateUserDTO) throws NotFoundException, InterruptedException;
+    public User updateUser(UserId id, UpdateUserDTO updateUserDTO) throws NotFoundException;
 
-    public Collection<Ride> getRides() throws InterruptedException;
+    public Collection<Ride> getRides();
 
-    public Optional<Ride> getRide(RideId rideId) throws InterruptedException;
+    public Optional<Ride> getRide(RideId rideId);
 
     public Ride startRide(StartRideDTO startRideDTO)
-            throws NotFoundException, UserAlreadyOnRideException, EBikeAlreadyOnRideException, InterruptedException;
+            throws NotFoundException, UserAlreadyOnRideException, EBikeAlreadyOnRideException;
 
-    public Ride endRide(EndRideDTO endRideDTO)
-            throws NotFoundException, RideAlreadyEndedException, InterruptedException;
+    public Ride endRide(EndRideDTO endRideDTO) throws NotFoundException, RideAlreadyEndedException;
 
 }
