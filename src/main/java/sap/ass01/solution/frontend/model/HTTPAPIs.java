@@ -11,7 +11,7 @@ public interface HTTPAPIs {
 
     void createEBike(EBike bike, Consumer<Result<Void, Exception>> handler);
 
-    void deleteEBike(String id, Consumer<Result<Void, Exception>> handler);
+    void deleteEBike(EBikeId id, Consumer<Result<Void, Exception>> handler);
 
     /* Users */
 
@@ -19,13 +19,13 @@ public interface HTTPAPIs {
 
     void createUser(User user, Consumer<Result<Void, Exception>> handler);
 
-    void deleteUser(String id, Consumer<Result<Void, Exception>> handler);
+    void deleteUser(UserId id, Consumer<Result<Void, Exception>> handler);
 
     /* Rides */
 
     void getRides(Consumer<Result<Iterable<Ride>, Exception>> handler);
 
-    void startRide(String userId, String eBikeId, Consumer<Result<Ride, Exception>> handler);
+    void startRide(UserId userId, EBikeId eBikeId, Consumer<Result<Ride, Exception>> handler);
 
-    void endRide(String id, Consumer<Result<Ride, Exception>> handler);
+    void endRide(RideId id, Consumer<Result<Ride, Exception>> handler);
 }
