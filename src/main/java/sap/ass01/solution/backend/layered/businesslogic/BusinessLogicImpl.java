@@ -292,7 +292,7 @@ public class BusinessLogicImpl implements BusinessLogic {
     }
 
     @Override
-    public Ride endRide(EndRideDTO endRideDTO)
+    public Ride endRide(RideId rideId)
             throws NotFoundException, RideAlreadyEndedException {
         synchronized (transactionLock) {
             while (isInTransaction) {
@@ -302,9 +302,9 @@ public class BusinessLogicImpl implements BusinessLogic {
                     throw new OperationFailedException(e);
                 }
             }
-            var optional = storage.find(RIDES, endRideDTO.rideId().id(), Ride.class);
+            var optional = storage.find(RIDES, rideId.id(), Ride.class);
             if (optional.isEmpty()) {
-                throw new NotFoundException("No ride with id " + endRideDTO.rideId().id() + " was found");
+                throw new NotFoundException("No ride with id " + rideId.id() + " was found");
             }
             var ride = optional.get();
             if (ride.endDate().isPresent()) {

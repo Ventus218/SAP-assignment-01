@@ -38,6 +38,6 @@ public interface BusinessLogic {
     public Ride startRide(StartRideDTO startRideDTO)
             throws NotFoundException, UserAlreadyOnRideException, EBikeAlreadyOnRideException;
 
-    public Ride endRide(EndRideDTO endRideDTO) throws NotFoundException, RideAlreadyEndedException;
+    public Ride endRide(RideId rideId) throws NotFoundException, RideAlreadyEndedException;
 
 }
