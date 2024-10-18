@@ -142,6 +142,8 @@ public class HTTPServerVerticle extends AbstractVerticle {
             var ride = businessLogic.getRide(rideId);
             return Future.succeededFuture(JsonObject.mapFrom(ride.orElseThrow(() -> new NotFoundException())));
         });
+
+        // End ride
         router.patch(route + "/:id").respond(ctx -> {
             var rideId = new RideId(ctx.pathParam("id"));
             try {
