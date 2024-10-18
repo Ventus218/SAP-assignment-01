@@ -121,7 +121,6 @@ public class BusinessLogicImpl implements BusinessLogic {
                     throw new OperationFailedException(e);
                 }
             }
-            // TODO: what about bike state???
             EBike bike = getEBike(ebikeId).orElseThrow(() -> new NotFoundException());
             EBike newBike = new EBike(ebikeId, bike.state(), updateEBikeDTO.loc(), updateEBikeDTO.direction(),
                     updateEBikeDTO.speed(), updateEBikeDTO.batteryLevel());
@@ -273,9 +272,12 @@ public class BusinessLogicImpl implements BusinessLogic {
                 throw new NotFoundException(
                         "No user with id " + startRideDTO.userId().id() + " was found to start a ride");
             }
-            if (storage.find(BIKES, startRideDTO.ebikeId().id(), EBike.class).isEmpty()) {
-                throw new NotFoundException(
-                        "No ebike with id " + startRideDTO.ebikeId().id() + " was found to start a ride");
+            var bike = storage.find(BIKES, startRideDTO.ebikeId().id(), EBike.class)
+                    .orElseThrow(() -> new NotFoundException(
+                            "No ebike with id " + startRideDTO.ebikeId().id() + " was found to start a ride"));
+
+            if (bike.state() != EBikeState.AVAILABLE) {
+                throw new EBikeAlreadyOnRideException("The ebike with id " + bike.id().id() + " is already on a ride");
             }
 
             var id = new RideId(UUID.randomUUID().toString());
@@ -286,6 +288,14 @@ public class BusinessLogicImpl implements BusinessLogic {
                 // Should not happen since we are using random generated UUIDs;
                 throw new FatalErrorException("A randomly generated UUID for a new ride collided with existing ride",
                         e);
+            }
+            try {
+                storage.update(BIKES, bike.id().id(),
+                        new EBike(bike.id(), EBikeState.IN_USE, bike.loc(), bike.direction(),
+                                bike.speed(), bike.batteryLevel()));
+            } catch (ItemNotPersistedException e) {
+                // Should not happen as the bike was retreived
+                throw new FatalErrorException("Something went wrong while updating bike state to IN_USE", e);
             }
             return ride;
         }
@@ -310,12 +320,23 @@ public class BusinessLogicImpl implements BusinessLogic {
             if (ride.endDate().isPresent()) {
                 throw new RideAlreadyEndedException("The ride is already ended");
             }
+            var bike = storage.find(BIKES, ride.ebikeId().id(), EBike.class)
+                    .orElseThrow(() -> new FatalErrorException("Did not find the bike associated to that ride"));
+
             ride = new Ride(ride.id(), ride.startedDate(), Optional.of(new Date()), ride.userId(), ride.ebikeId());
             try {
                 storage.update(RIDES, ride.id().id(), ride);
             } catch (ItemNotPersistedException e) {
                 // Should not happen as the ride was retreived
                 throw new FatalErrorException("Unexpected update of ride failed", e);
+            }
+            try {
+                storage.update(BIKES, bike.id().id(),
+                        new EBike(bike.id(), EBikeState.AVAILABLE, bike.loc(), bike.direction(),
+                                bike.speed(), bike.batteryLevel()));
+            } catch (ItemNotPersistedException e) {
+                // Should not happen as the bike was retreived
+                throw new FatalErrorException("Something went wrong while updating bike state to AVAILABLE", e);
             }
             return ride;
         }
