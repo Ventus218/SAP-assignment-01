@@ -32,6 +32,10 @@ public class HTTPServerVerticle extends AbstractVerticle {
                 ctx.response().setStatusCode(404).end(e.getMessage());
             } else if (ctx.failure() instanceof IllegalArgumentException e) {
                 ctx.response().setStatusCode(400).end(e.getMessage());
+            } else {
+                var err = ctx.failure();
+                var msg = Optional.ofNullable(err.getMessage()).orElse("Errore sconosciuto: " + err.toString());
+                ctx.response().setStatusCode(500).end(msg);
             }
         }));
 
