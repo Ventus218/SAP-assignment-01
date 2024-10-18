@@ -28,7 +28,7 @@ public class FileSystemDBCollectionStorage implements CollectionStorage {
     }
 
     private String collectionFileName(String collectionName) {
-        return collectionName + ".txt";
+        return collectionName + ".json";
     }
 
     @Override
