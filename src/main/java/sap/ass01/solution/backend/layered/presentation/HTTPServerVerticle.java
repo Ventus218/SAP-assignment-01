@@ -55,7 +55,7 @@ public class HTTPServerVerticle extends AbstractVerticle {
         });
         router.post(route).handler(BodyHandler.create()).respond(ctx -> {
             var json = Optional.ofNullable(ctx.body().asJsonObject()).orElseThrow(() -> {
-                return new IllegalArgumentException();
+                return new IllegalArgumentException("Expected a CreateEBikeDTO");
             });
             var dto = json.mapTo(CreateEBikeDTO.class);
             return Future.succeededFuture(businessLogic.createEBike(dto));
@@ -73,7 +73,7 @@ public class HTTPServerVerticle extends AbstractVerticle {
         router.patch(route + "/:id").handler(BodyHandler.create()).respond(ctx -> {
             var bikeId = new EBikeId(ctx.pathParam("id"));
             var json = Optional.ofNullable(ctx.body().asJsonObject()).orElseThrow(() -> {
-                return new IllegalArgumentException();
+                return new IllegalArgumentException("Expected a UpdateEBikeDTO");
             });
             var dto = json.mapTo(UpdateEBikeDTO.class);
             var bike = businessLogic.updateEBike(bikeId, dto);
@@ -90,7 +90,7 @@ public class HTTPServerVerticle extends AbstractVerticle {
         // signup
         router.post(route).handler(BodyHandler.create()).respond(ctx -> {
             var json = Optional.ofNullable(ctx.body().asJsonObject()).orElseThrow(() -> {
-                return new IllegalArgumentException();
+                return new IllegalArgumentException("Expected a CreateUserDTO");
             });
             var dto = json.mapTo(CreateUserDTO.class);
             return Future.succeededFuture(businessLogic.signup(dto));
@@ -124,7 +124,7 @@ public class HTTPServerVerticle extends AbstractVerticle {
         });
         router.post(route).handler(BodyHandler.create()).respond(ctx -> {
             var json = Optional.ofNullable(ctx.body().asJsonObject()).orElseThrow(() -> {
-                return new IllegalArgumentException();
+                return new IllegalArgumentException("Expected a StartRideDTO");
             });
             var dto = json.mapTo(StartRideDTO.class);
             try {
