@@ -14,22 +14,31 @@ public class LayeredArchTests {
      */
     @Test
     public void test() {
-        JavaClasses importedClasses = new ClassFileImporter().importPackages("sap.ass01.solution.backend.layered");
+        String layered = "sap.ass01.solution.backend.layered";
+        String presentation = layered + ".presentation";
+        String businesslogic = layered + ".businesslogic";
+        String persistence = layered + ".persistence";
+        String database = layered + ".database";
+        JavaClasses importedClasses = new ClassFileImporter().importPackages(
+                presentation,
+                businesslogic,
+                persistence,
+                database);
 
         List<ArchRule> rules = new ArrayList<>();
-        // TODO: Uncomment after writing presentation classes
-        // rules.add(
-        //         classes().that().resideInAPackage("..presentation..")
-        //                 .should().onlyBeAccessed().byAnyPackage("..presentation.."));
+
         rules.add(
-                classes().that().resideInAPackage("..businesslogic..")
-                        .should().onlyBeAccessed().byAnyPackage("..businesslogic..", "..presentation.."));
+                classes().that().resideInAPackage(presentation + "..")
+                        .should().onlyBeAccessed().byAnyPackage(presentation + ".."));
         rules.add(
-                classes().that().resideInAPackage("..persistence..")
-                        .should().onlyBeAccessed().byAnyPackage("..persistence..", "..businesslogic.."));
+                classes().that().resideInAPackage(businesslogic + "..")
+                        .should().onlyBeAccessed().byAnyPackage(businesslogic + "..", presentation + ".."));
         rules.add(
-                classes().that().resideInAPackage("..database..")
-                        .should().onlyBeAccessed().byAnyPackage("..database..", "..persistence.."));
+                classes().that().resideInAPackage(persistence + "..")
+                        .should().onlyBeAccessed().byAnyPackage(persistence + "..", businesslogic + ".."));
+        rules.add(
+                classes().that().resideInAPackage(database + "..")
+                        .should().onlyBeAccessed().byAnyPackage(database + "..", persistence + ".."));
 
         rules.forEach(r -> r.check(importedClasses));
     }
