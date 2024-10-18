@@ -3,6 +3,7 @@ package sap.ass01.solution.backend.layered.persistence;
 import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.stream.*;
 import io.vertx.core.json.*;
 import sap.ass01.solution.backend.layered.database.FileSystemDatabase;
 import sap.ass01.solution.backend.layered.persistence.exceptions.DuplicateIdException;
@@ -83,7 +84,7 @@ public class FileSystemDBCollectionStorage implements CollectionStorage {
 
         JsonObject obj = new JsonObject().put("id", objectId).put("object", jsonObject);
         var listWithoutOldObject = getJsonArrayFromCollection(collectionName).stream()
-                .filter(o -> !((JsonObject) o).getString("id").equals(objectId)).toList();
+                .filter(o -> !((JsonObject) o).getString("id").equals(objectId)).collect(Collectors.toList());
         var arrayWithoutOldObject = new JsonArray(listWithoutOldObject);
         var newJsonArray = arrayWithoutOldObject.add(obj);
         File file = db.getFile(collectionFileName(collectionName));
@@ -113,7 +114,7 @@ public class FileSystemDBCollectionStorage implements CollectionStorage {
         }
 
         var listWithoutOldObject = getJsonArrayFromCollection(collectionName).stream()
-                .filter(o -> !((JsonObject) o).getString("id").equals(objectId)).toList();
+                .filter(o -> !((JsonObject) o).getString("id").equals(objectId)).collect(Collectors.toList());
         var newJsonArray = new JsonArray(listWithoutOldObject);
         File file = db.getFile(collectionFileName(collectionName));
         try {
