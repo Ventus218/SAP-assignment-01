@@ -1,10 +1,12 @@
 package sap.ass01.solution.frontend.user;
 
-import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
+import javax.swing.*;
+import java.util.Optional;
+import sap.ass01.solution.frontend.model.*;
 
 public class RideView extends JFrame {
+    private final RideViewModel viewModel;
     private JComboBox<String> bikeSelection;
     private JButton startRideButton;
     private JButton stopRideButton;
@@ -12,13 +14,9 @@ public class RideView extends JFrame {
     private JLabel loadingLabel;
 
     private boolean isRideActive = false;
-    private ArrayList<String> bikes;
 
-    public RideView() {
-        bikes = new ArrayList<>();
-        bikes.add("EBike 1");
-        bikes.add("EBike 2");
-        bikes.add("EBike 3");
+    public RideView(HTTPAPIs api, UserId userId) {
+        viewModel = new RideViewModel(api, userId);
 
         setTitle("EBike Selection");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,7 +24,8 @@ public class RideView extends JFrame {
         setResizable(false);
         setLayout(new FlowLayout());
 
-        bikeSelection = new JComboBox<>(bikes.toArray(new String[0]));
+        bikeSelection = new JComboBox<String>();
+        bikeSelection.setSelectedIndex(-1);
         startRideButton = new JButton("Start Ride");
         stopRideButton = new JButton("Stop Ride");
         errorLabel = new JLabel();
@@ -39,61 +38,24 @@ public class RideView extends JFrame {
         loadingLabel.setVisible(false); // Initially hidden
 
         bikeSelection.addActionListener(e -> {
-            if (!isRideActive) {
-                startRideButton.setEnabled(bikeSelection.getSelectedItem() != null);
-            }
+            viewModel.setSelectBikeIndex(Optional.of(bikeSelection.getSelectedIndex()));
+            updateView();
         });
 
         startRideButton.addActionListener(e -> {
             showLoadingIndicator();
-            SwingWorker<Void, Void> worker = new SwingWorker<>() {
-                @Override
-                protected Void doInBackground() throws InterruptedException {
-                    Thread.sleep(2000); // Simulate loading
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    hideLoadingIndicator();
-                    if (!isRideActive) {
-                        isRideActive = true;
-                        errorLabel.setText("");
-                        startRideButton.setEnabled(false);
-                        stopRideButton.setEnabled(true);
-                        bikeSelection.setEnabled(false); // Disable bike selection during the ride
-                    } else {
-                        errorLabel.setText("Ride already started!");
-                    }
-                }
-            };
-            worker.execute();
+            viewModel.startRide(res -> {
+                SwingUtilities.invokeLater(() -> res.handle(r -> updateView(), this::showError));
+                hideLoadingIndicator();
+            });
         });
 
         stopRideButton.addActionListener(e -> {
             showLoadingIndicator();
-            SwingWorker<Void, Void> worker = new SwingWorker<>() {
-                @Override
-                protected Void doInBackground() throws InterruptedException {
-                    Thread.sleep(2000); // Simulate loading
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    hideLoadingIndicator();
-                    if (isRideActive) {
-                        isRideActive = false;
-                        errorLabel.setText("");
-                        startRideButton.setEnabled(true);
-                        stopRideButton.setEnabled(false);
-                        bikeSelection.setEnabled(true); // Re-enable bike selection after stopping the ride
-                    } else {
-                        errorLabel.setText("No ride to stop!");
-                    }
-                }
-            };
-            worker.execute();
+            viewModel.stopRide(res -> {
+                SwingUtilities.invokeLater(() -> res.handle(r -> updateView(), this::showError));
+                hideLoadingIndicator();
+            });
         });
 
         // Add components to the frame
@@ -105,6 +67,22 @@ public class RideView extends JFrame {
         add(loadingLabel);
 
         setVisible(true);
+        updateView();
+        viewModel.fetchAvailableBikes(
+                res -> SwingUtilities.invokeLater(() -> res.handle(bikes -> updateView(), this::showError)));
+    }
+
+    private void updateView() {
+        bikeSelection.removeAllItems();
+        viewModel.getAvailableBikes().forEach(b -> bikeSelection.addItem(b.id().id()));
+        bikeSelection.setSelectedIndex(viewModel.getSelectBikeIndex().orElse(-1));
+        bikeSelection.setEnabled(!viewModel.isRiding());
+        startRideButton.setEnabled(viewModel.getSelectBikeIndex().isPresent() && !viewModel.isRiding());
+        stopRideButton.setEnabled(viewModel.isRiding());
+    }
+
+    private void showError(Throwable error) {
+        JOptionPane.showConfirmDialog(this, error.getMessage());
     }
 
     // Show loading indicator and disable user interaction

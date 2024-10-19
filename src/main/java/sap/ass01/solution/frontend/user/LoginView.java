@@ -50,7 +50,7 @@ public class LoginView extends JFrame {
             showLoadingIndicator();
             viewModel.login(res -> res.handle(user -> {
                 hideLoadingIndicator();
-                new RideView();
+                new RideView(api, user.id());
                 dispose();
             }, err -> {
                 hideLoadingIndicator();
@@ -61,7 +61,7 @@ public class LoginView extends JFrame {
             showLoadingIndicator();
             viewModel.signup(res -> res.handle(user -> {
                 hideLoadingIndicator();
-                new RideView();
+                new RideView(api, user.id());
                 dispose();
             }, err -> {
                 hideLoadingIndicator();
