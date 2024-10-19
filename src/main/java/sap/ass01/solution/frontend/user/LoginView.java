@@ -1,16 +1,19 @@
 package sap.ass01.solution.frontend.user;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import sap.ass01.solution.frontend.model.HTTPAPIs;
 
 public class LoginView extends JFrame {
+    private final LoginViewModel viewModel;
     private JTextField usernameField;
     private JButton loginButton;
     private JButton signUpButton;
     private JLabel errorLabel;
     private JLabel loadingLabel;
 
-    public LoginView() {
+    public LoginView(HTTPAPIs api) {
+        viewModel = new LoginViewModel(api);
         setTitle("Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(250, 200);
@@ -31,26 +34,38 @@ public class LoginView extends JFrame {
 
         usernameField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             public void insertUpdate(javax.swing.event.DocumentEvent e) {
-                updateButtonStates();
+                updateViewModel();
             }
 
             public void removeUpdate(javax.swing.event.DocumentEvent e) {
-                updateButtonStates();
+                updateViewModel();
             }
 
             public void changedUpdate(javax.swing.event.DocumentEvent e) {
-                updateButtonStates();
+                updateViewModel();
             }
         });
 
         loginButton.addActionListener(e -> {
             showLoadingIndicator();
-            transitionToRideWindow();
+            viewModel.login(res -> res.handle(user -> {
+                hideLoadingIndicator();
+                new RideView();
+                dispose();
+            }, err -> {
+                hideLoadingIndicator();
+            }));
         });
 
         signUpButton.addActionListener(e -> {
             showLoadingIndicator();
-            transitionToRideWindow();
+            viewModel.signup(res -> res.handle(user -> {
+                hideLoadingIndicator();
+                new RideView();
+                dispose();
+            }, err -> {
+                hideLoadingIndicator();
+            }));
         });
 
         add(new JLabel("Username:"));
@@ -63,31 +78,14 @@ public class LoginView extends JFrame {
         setVisible(true);
     }
 
-    private void updateButtonStates() {
-        boolean isEmpty = usernameField.getText().trim().isEmpty();
-        loginButton.setEnabled(!isEmpty);
-        signUpButton.setEnabled(!isEmpty);
+    private void updateViewModel() {
+        String username = usernameField.getText().trim();
+        viewModel.setUsername(username);
+
+        boolean usernameIsEmpty = username.isEmpty();
+        loginButton.setEnabled(!usernameIsEmpty);
+        signUpButton.setEnabled(!usernameIsEmpty);
         errorLabel.setText(""); // Clear error when text is entered
-    }
-
-    private void transitionToRideWindow() {
-        // Simulate a loading delay by using SwingWorker to prevent UI freezing
-        SwingWorker<Void, Void> worker = new SwingWorker<>() {
-            @Override
-            protected Void doInBackground() throws InterruptedException {
-                // Simulate loading time (e.g., 2 seconds)
-                Thread.sleep(2000);
-                return null;
-            }
-
-            @Override
-            protected void done() {
-                hideLoadingIndicator();
-                new RideView(); // Transition to the second view
-                dispose(); // Dispose the login window to free memory
-            }
-        };
-        worker.execute();
     }
 
     // Show loading indicator and disable user interaction
