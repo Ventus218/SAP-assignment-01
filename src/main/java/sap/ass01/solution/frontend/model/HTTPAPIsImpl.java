@@ -57,9 +57,19 @@ public class HTTPAPIsImpl implements HTTPAPIs {
     }
 
     @Override
-    public void createUser(User user, Consumer<Result<Void, Throwable>> handler) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'createUser'");
+    public void signup(CreateUserDTO dto, Consumer<Result<User, Throwable>> handler) {
+        client.post(USERS).sendJsonObject(JsonObject.mapFrom(dto)).onSuccess(buf -> {
+            var item = buf.bodyAsJsonObject().mapTo(User.class);
+            handler.accept(Result.success(item));
+        }).onFailure(err -> handler.accept(Result.failure(err)));
+    }
+
+    @Override
+    public void login(UserId id, Consumer<Result<User, Throwable>> handler) {
+        client.get(USERS + "/" + id.id()).send().onSuccess(buf -> {
+            var item = buf.bodyAsJsonObject().mapTo(User.class);
+            handler.accept(Result.success(item));
+        }).onFailure(err -> handler.accept(Result.failure(err)));
     }
 
     @Override
@@ -75,15 +85,19 @@ public class HTTPAPIsImpl implements HTTPAPIs {
     }
 
     @Override
-    public void startRide(UserId userId, EBikeId eBikeId, Consumer<Result<Ride, Throwable>> handler) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'startRide'");
+    public void startRide(StartRideDTO dto, Consumer<Result<Ride, Throwable>> handler) {
+        client.post(RIDES).sendJsonObject(JsonObject.mapFrom(dto)).onSuccess(buf -> {
+            var item = buf.bodyAsJsonObject().mapTo(Ride.class);
+            handler.accept(Result.success(item));
+        }).onFailure(err -> handler.accept(Result.failure(err)));
     }
 
     @Override
     public void endRide(RideId id, Consumer<Result<Ride, Throwable>> handler) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'endRide'");
+        client.patch(RIDES + "/" + id.id()).send().onSuccess(buf -> {
+            var item = buf.bodyAsJsonObject().mapTo(Ride.class);
+            handler.accept(Result.success(item));
+        }).onFailure(err -> handler.accept(Result.failure(err)));
     }
 
 }

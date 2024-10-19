@@ -2,6 +2,7 @@ package sap.ass01.solution.frontend.model;
 
 import java.util.*;
 import java.util.function.*;
+import sap.ass01.solution.frontend.model.dto.*;
 import sap.ass01.solution.frontend.utils.Result;
 
 public class HTTPAPIsMock implements HTTPAPIs {
@@ -18,23 +19,24 @@ public class HTTPAPIsMock implements HTTPAPIs {
     }
 
     @Override
-    public void getEBikes(Consumer<Result<Iterable<EBike>, Exception>> handler) {
+    public void getEBikes(Consumer<Result<Iterable<EBike>, Throwable>> handler) {
         runDelayedThread(() -> {
             handler.accept(Result.success(bikes.values()));
         });
     }
 
     @Override
-    public void createEBike(EBike bike, Consumer<Result<Void, Exception>> handler) {
+    public void createEBike(CreateEBikeDTO dto, Consumer<Result<EBike, Throwable>> handler) {
         runDelayedThread(() -> {
-            bikes.put(bike.id(), bike);
+            bikes.put(dto.id(), new EBike(dto.id(), EBikeState.AVAILABLE, dto.loc(), dto.direction(), dto.speed(),
+                    dto.batteryLevel()));
             handler.accept(Result.success(null));
             // handler.accept(Result.failure(new Exception("sosoooss")));
         });
     }
 
     @Override
-    public void deleteEBike(EBikeId id, Consumer<Result<Void, Exception>> handler) {
+    public void deleteEBike(EBikeId id, Consumer<Result<Void, Throwable>> handler) {
         runDelayedThread(() -> {
             bikes.remove(id);
             handler.accept(Result.success(null));
@@ -42,47 +44,50 @@ public class HTTPAPIsMock implements HTTPAPIs {
     }
 
     @Override
-    public void getUsers(Consumer<Result<Iterable<User>, Exception>> handler) {
+    public void getUsers(Consumer<Result<Iterable<User>, Throwable>> handler) {
         runDelayedThread(() -> {
             handler.accept(Result.success(users.values()));
         });
     }
 
     @Override
-    public void createUser(User user, Consumer<Result<Void, Exception>> handler) {
+    public void signup(CreateUserDTO dto, Consumer<Result<User, Throwable>> handler) {
         runDelayedThread(() -> {
-            users.put(user.id(), user);
+            users.put(dto.id(), new User(dto.id(), 100));
             handler.accept(Result.success(null));
         });
     }
 
     @Override
-    public void deleteUser(UserId id, Consumer<Result<Void, Exception>> handler) {
+    public void login(UserId id, Consumer<Result<User, Throwable>> handler) {
         runDelayedThread(() -> {
-            users.remove(id);
-            handler.accept(Result.success(null));
+            if (users.containsKey(id)) {
+                handler.accept(Result.success(null));
+            } else {
+                handler.accept(Result.failure(new IllegalArgumentException("User does not exists")));
+            }
         });
     }
 
     @Override
-    public void getRides(Consumer<Result<Iterable<Ride>, Exception>> handler) {
+    public void getRides(Consumer<Result<Iterable<Ride>, Throwable>> handler) {
         runDelayedThread(() -> {
             handler.accept(Result.success(rides.values()));
         });
     }
 
     @Override
-    public void startRide(UserId userId, EBikeId eBikeId, Consumer<Result<Ride, Exception>> handler) {
+    public void startRide(StartRideDTO dto, Consumer<Result<Ride, Throwable>> handler) {
         runDelayedThread(() -> {
             var rideId = new RideId(UUID.randomUUID().toString());
-            var ride = new Ride(rideId, new Date(), Optional.empty(), userId, eBikeId);
+            var ride = new Ride(rideId, new Date(), Optional.empty(), dto.userId(), dto.ebikeId());
             rides.put(ride.id(), ride);
             handler.accept(Result.success(ride));
         });
     }
 
     @Override
-    public void endRide(RideId id, Consumer<Result<Ride, Exception>> handler) {
+    public void endRide(RideId id, Consumer<Result<Ride, Throwable>> handler) {
         runDelayedThread(() -> {
             var oldRide = rides.get(id);
             var newRide = new Ride(oldRide.id(), oldRide.startedDate(), Optional.of(new Date()), oldRide.userId(),

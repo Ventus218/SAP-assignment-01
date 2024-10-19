@@ -18,13 +18,15 @@ public interface HTTPAPIs {
 
     void getUsers(Consumer<Result<Iterable<User>, Throwable>> handler);
 
-    void createUser(User user, Consumer<Result<Void, Throwable>> handler);
+    void signup(CreateUserDTO dto, Consumer<Result<User, Throwable>> handler);
+
+    void login(UserId id, Consumer<Result<User, Throwable>> handler);
 
     /* Rides */
 
     void getRides(Consumer<Result<Iterable<Ride>, Throwable>> handler);
 
-    void startRide(UserId userId, EBikeId eBikeId, Consumer<Result<Ride, Throwable>> handler);
+    void startRide(StartRideDTO dto, Consumer<Result<Ride, Throwable>> handler);
 
     void endRide(RideId id, Consumer<Result<Ride, Throwable>> handler);
 }
