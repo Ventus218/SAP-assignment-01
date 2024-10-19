@@ -40,7 +40,7 @@ public class AdminControlPanelView extends JFrame {
 			new AddEBikeDialog(this, ebike -> {
 				startLoading();
 				viewModel.createEBike(ebike, res -> {
-					res.handle(nothing -> {
+					res.handle(bike -> {
 						SwingUtilities.invokeLater(this::refreshView);
 						fetchBikes();
 					}, this::showError);
@@ -92,7 +92,7 @@ public class AdminControlPanelView extends JFrame {
 		refreshView();
 	}
 
-	private void showError(Exception error) {
+	private void showError(Throwable error) {
 		JOptionPane.showConfirmDialog(this, error.getMessage());
 	}
 

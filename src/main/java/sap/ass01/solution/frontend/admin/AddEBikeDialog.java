@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
 import sap.ass01.solution.frontend.model.*;
+import sap.ass01.solution.frontend.model.dto.CreateEBikeDTO;
 
 /**
  * 
@@ -29,9 +30,9 @@ public class AddEBikeDialog extends JDialog {
     private JButton cancelButton;
     private JLabel errorLabel;
     private JLabel loadingLabel;
-    private final Consumer<EBike> createEBike;
+    private final Consumer<CreateEBikeDTO> createEBike;
 
-    public AddEBikeDialog(AdminControlPanelView owner, Consumer<EBike> createEBike) {
+    public AddEBikeDialog(AdminControlPanelView owner, Consumer<CreateEBikeDTO> createEBike) {
         super(owner, "Adding E-Bike", true);
         this.createEBike = createEBike;
         initializeComponents();
@@ -89,7 +90,7 @@ public class AddEBikeDialog extends JDialog {
             double speed = 0;
             int batteryLevel = 100;
             createEBike
-                    .accept(new EBike(new EBikeId(id), EBikeState.AVAILABLE, location, direction, speed, batteryLevel));
+                    .accept(new CreateEBikeDTO(new EBikeId(id), location, direction, speed, batteryLevel));
             dispose();
         });
 

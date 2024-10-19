@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.*;
 import sap.ass01.solution.frontend.model.*;
+import sap.ass01.solution.frontend.model.dto.*;
 import sap.ass01.solution.frontend.utils.Result;
 
 public class AdminControlPanelViewModel {
@@ -19,7 +20,7 @@ public class AdminControlPanelViewModel {
 
     /* EBikes */
 
-    void fetchBikes(Consumer<Result<Iterable<EBike>, Exception>> handler) {
+    void fetchBikes(Consumer<Result<Iterable<EBike>, Throwable>> handler) {
         api.getEBikes(res -> {
             res.handle(bikes -> {
                 this.bikes = StreamSupport.stream(bikes.spliterator(), true).collect(Collectors.toList());
@@ -30,13 +31,13 @@ public class AdminControlPanelViewModel {
         });
     }
 
-    void createEBike(EBike bike, Consumer<Result<Void, Exception>> handler) {
-        api.createEBike(bike, handler);
+    void createEBike(CreateEBikeDTO dto, Consumer<Result<EBike, Throwable>> handler) {
+        api.createEBike(dto, handler);
     }
 
     /* Users */
 
-    void fetchUsers(Consumer<Result<Iterable<User>, Exception>> handler) {
+    void fetchUsers(Consumer<Result<Iterable<User>, Throwable>> handler) {
         api.getUsers(res -> {
             res.handle(users -> {
                 this.users = StreamSupport.stream(users.spliterator(), true).collect(Collectors.toList());
@@ -49,7 +50,7 @@ public class AdminControlPanelViewModel {
 
     /* Rides */
 
-    void fetchRides(Consumer<Result<Iterable<Ride>, Exception>> handler) {
+    void fetchRides(Consumer<Result<Iterable<Ride>, Throwable>> handler) {
         api.getRides(res -> {
             res.handle(rides -> {
                 this.rides = StreamSupport.stream(rides.spliterator(), true).collect(Collectors.toList());
