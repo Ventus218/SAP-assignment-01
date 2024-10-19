@@ -138,7 +138,7 @@ public class AdminControlPanelView extends JFrame {
 			while (userIterator.hasNext()) {
 				var u = userIterator.next();
 				g2.drawRect(10, y, 20, 20);
-				g2.drawString(u.id() + " - credit: " + u.credit(), 35, y + 15);
+				g2.drawString(u.id().id() + " - credit: " + u.credit(), 35, y + 15);
 				y += 25;
 			}
 		}
