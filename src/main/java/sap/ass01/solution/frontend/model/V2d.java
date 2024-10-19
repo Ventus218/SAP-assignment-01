@@ -15,22 +15,7 @@ package sap.ass01.solution.frontend.model;
  * objects are completely state-less
  *
  */
-public class V2d implements java.io.Serializable {
-
-    private double x, y;
-
-    public V2d(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public double x() {
-        return x;
-    }
-
-    public double y() {
-        return y;
-    }
+public record V2d(double x, double y) {
 
     public V2d sum(V2d v) {
         return new V2d(x + v.x, y + v.y);
@@ -42,7 +27,7 @@ public class V2d implements java.io.Serializable {
         var sn = Math.sin(rad);
         var x1 = x * cs - y * sn;
         var y1 = x * sn + y * cs;
-        var v = new V2d(x1, y1).getNormalized();
+        var v = new V2d(x1, y1).normalized();
         return v;
     }
 
@@ -50,7 +35,7 @@ public class V2d implements java.io.Serializable {
         return (double) Math.sqrt(x * x + y * y);
     }
 
-    public V2d getNormalized() {
+    public V2d normalized() {
         double module = (double) Math.sqrt(x * x + y * y);
         return new V2d(x / module, y / module);
     }
