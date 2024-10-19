@@ -5,6 +5,7 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.jackson.DatabindCodec;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import sap.ass01.solution.backend.layered.businesslogic.BusinessLogicImpl;
+import sap.ass01.solution.backend.layered.businesslogic.RidesSimulator;
 import sap.ass01.solution.backend.layered.businesslogic.model.*;
 import sap.ass01.solution.backend.layered.businesslogic.model.dto.*;
 import sap.ass01.solution.backend.layered.database.*;
@@ -21,7 +22,7 @@ public class LayeredBackendApp {
         try {
             businessLogic.signup(new CreateUserDTO(new UserId("user1")));
             businessLogic
-                    .createEBike(new CreateEBikeDTO(new EBikeId("bike1"), new P2d(50, 100), new V2d(0, 0), 0, 100));
+                    .createEBike(new CreateEBikeDTO(new EBikeId("bike1"), new P2d(50, 100), new V2d(1, 0), 0, 100));
         } catch (IllegalArgumentException e) {
             // duplicates
         }
@@ -31,5 +32,7 @@ public class LayeredBackendApp {
                 .deployVerticle(new HTTPServerVerticle(businessLogic))
                 .onSuccess(res -> System.out.println("Verticle deployed"))
                 .onFailure(err -> System.err.println("Verticle deployment failed with error: " + err.getMessage()));
+
+        new RidesSimulator(businessLogic, 1000).start();
     }
 }
