@@ -199,13 +199,12 @@ public class BusinessLogicImpl implements BusinessLogic {
             throws NotFoundException, UserAlreadyOnRideException, EBikeAlreadyOnRideException {
         try {
             transactionLock.lock();
-            if (storage.getAllFromCollection(RIDES, Ride.class).stream()
-                    .anyMatch(r -> r.userId().equals(startRideDTO.userId()))) {
+            var rides = storage.getAllFromCollection(RIDES, Ride.class);
+            if (rides.stream().anyMatch(r -> r.userId().equals(startRideDTO.userId()) && r.endDate().isEmpty())) {
                 throw new UserAlreadyOnRideException(
                         "The user with id " + startRideDTO.userId().id() + " is already on a ride");
             }
-            if (storage.getAllFromCollection(RIDES, Ride.class).stream()
-                    .anyMatch(r -> r.ebikeId().equals(startRideDTO.ebikeId()))) {
+            if (rides.stream().anyMatch(r -> r.ebikeId().equals(startRideDTO.ebikeId()) && r.endDate().isEmpty())) {
                 throw new EBikeAlreadyOnRideException(
                         "The ebike with id " + startRideDTO.ebikeId().id() + " is already on a ride");
             }
