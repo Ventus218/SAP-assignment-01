@@ -26,15 +26,15 @@ public class HTTPServerVerticle extends AbstractVerticle {
         registerRideHandlers(router);
 
         router.getRoutes().forEach(r -> r.failureHandler(ctx -> {
-            if (ctx.failure() instanceof OperationFailedException e) {
-                ctx.response().setStatusCode(500).end(e.getMessage());
-            } else if (ctx.failure() instanceof NotFoundException e) {
-                ctx.response().setStatusCode(404).end(e.getMessage());
-            } else if (ctx.failure() instanceof IllegalArgumentException e) {
-                ctx.response().setStatusCode(400).end(e.getMessage());
+            var err = ctx.failure();
+            var msg = Optional.ofNullable(err.getMessage()).orElse("Errore sconosciuto: " + err.toString());
+            if (err instanceof OperationFailedException) {
+                ctx.response().setStatusCode(500).end(msg);
+            } else if (err instanceof NotFoundException) {
+                ctx.response().setStatusCode(404).end(msg);
+            } else if (err instanceof IllegalArgumentException) {
+                ctx.response().setStatusCode(400).end(msg);
             } else {
-                var err = ctx.failure();
-                var msg = Optional.ofNullable(err.getMessage()).orElse("Errore sconosciuto: " + err.toString());
                 ctx.response().setStatusCode(500).end(msg);
             }
         }));
