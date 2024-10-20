@@ -10,7 +10,7 @@ import sap.ass01.solution.backend.layered.businesslogic.model.*;
 import sap.ass01.solution.backend.layered.businesslogic.model.dto.*;
 import sap.ass01.solution.backend.layered.database.*;
 import sap.ass01.solution.backend.layered.persistence.*;
-import sap.ass01.solution.backend.layered.presentation.HTTPServerVerticle;
+import sap.ass01.solution.backend.layered.presentation.HTTPServerPresentation;
 
 public class LayeredBackendApp {
     public static void main(String[] args) throws IllegalArgumentException {
@@ -29,7 +29,7 @@ public class LayeredBackendApp {
 
         Vertx
                 .vertx()
-                .deployVerticle(new HTTPServerVerticle(businessLogic))
+                .deployVerticle(new HTTPServerPresentation(businessLogic))
                 .onSuccess(res -> System.out.println("Verticle deployed"))
                 .onFailure(err -> System.err.println("Verticle deployment failed with error: " + err.getMessage()));
 

@@ -11,11 +11,11 @@ import sap.ass01.solution.backend.layered.businesslogic.exceptions.*;
 import sap.ass01.solution.backend.layered.businesslogic.model.*;
 import sap.ass01.solution.backend.layered.businesslogic.model.dto.*;
 
-public class HTTPServerVerticle extends AbstractVerticle {
+public class HTTPServerPresentation extends AbstractVerticle {
 
     private final BusinessLogic businessLogic;
 
-    public HTTPServerVerticle(BusinessLogic businessLogic) {
+    public HTTPServerPresentation(BusinessLogic businessLogic) {
         this.businessLogic = businessLogic;
     }
 
