@@ -93,7 +93,7 @@ public class AdminControlPanelView extends JFrame {
 	}
 
 	private void showError(Throwable error) {
-		JOptionPane.showConfirmDialog(this, error.getMessage());
+		JOptionPane.showMessageDialog(this, error.getMessage());
 	}
 
 	public void refreshView() {
