@@ -18,7 +18,7 @@ public class RideView extends JFrame {
     public RideView(HTTPAPIs api, UserId userId) {
         viewModel = new RideViewModel(api, userId);
 
-        setTitle("EBike Selection");
+        setTitle("EBikeApp - Ride");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(280, 250);
         setResizable(false);

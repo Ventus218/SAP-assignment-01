@@ -25,7 +25,7 @@ public class AdminControlPanelView extends JFrame {
 	}
 
 	protected void setupView() {
-		setTitle("Admin control panel");
+		setTitle("EBikeApp - Admin control panel");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(800, 600);
 		setResizable(false);

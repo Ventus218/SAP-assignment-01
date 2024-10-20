@@ -14,7 +14,7 @@ public class LoginView extends JFrame {
 
     public LoginView(HTTPAPIs api) {
         viewModel = new LoginViewModel(api);
-        setTitle("Login");
+        setTitle("EBikeApp - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(250, 200);
         setResizable(false);
