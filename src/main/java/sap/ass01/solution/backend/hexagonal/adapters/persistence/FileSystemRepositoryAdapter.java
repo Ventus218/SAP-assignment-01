@@ -58,13 +58,13 @@ public class FileSystemRepositoryAdapter<T> implements Repository<T> {
         var optional = getJsonArray().stream()
                 .filter(o -> ((JsonObject) o).getString("id").equals(id.id()))
                 .findFirst();
-        return optional.map(o -> ((JsonObject) o)).map(o -> o.getJsonObject("entity").mapTo(id.type()));
+        return optional.map(o -> ((JsonObject) o)).map(o -> o.getJsonObject("object").mapTo(id.type()));
     }
 
     @Override
     public Collection<T> getAll() {
         var jsonArray = getJsonArray();
-        return jsonArray.stream().map(o -> ((JsonObject) o).getJsonObject("entity"))
+        return jsonArray.stream().map(o -> ((JsonObject) o).getJsonObject("object"))
                 .map(o -> o.mapTo(entityType)).toList();
     }
 
@@ -75,7 +75,7 @@ public class FileSystemRepositoryAdapter<T> implements Repository<T> {
             throw new DuplicateIdException("An " + entityName + " with id " + id.id() + " already exists.");
         }
 
-        JsonObject obj = new JsonObject().put("id", id.id()).put("entity", JsonObject.mapFrom(entity));
+        JsonObject obj = new JsonObject().put("id", id.id()).put("object", JsonObject.mapFrom(entity));
         JsonArray newJsonArray = getJsonArray().add(obj);
         try {
             Files.write(file.toPath(), newJsonArray.encode().getBytes());
@@ -95,7 +95,7 @@ public class FileSystemRepositoryAdapter<T> implements Repository<T> {
             throw new NotInRepositoryException("An " + entityName + " with id " + id.id() + " does not exist.");
         }
 
-        JsonObject obj = new JsonObject().put("id", id.id()).put("entity", JsonObject.mapFrom(entity));
+        JsonObject obj = new JsonObject().put("id", id.id()).put("object", JsonObject.mapFrom(entity));
         var listWithoutOldObject = getJsonArray().stream()
                 .filter(o -> !((JsonObject) o).getString("id").equals(id.id())).collect(Collectors.toList());
         var arrayWithoutOldObject = new JsonArray(listWithoutOldObject);
