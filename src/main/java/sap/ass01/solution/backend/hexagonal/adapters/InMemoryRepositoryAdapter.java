@@ -36,7 +36,7 @@ public class InMemoryRepositoryAdapter<T> implements Repository<T> {
     }
 
     @Override
-    public Collection<T> getAll(Class<T> type) {
+    public Collection<T> getAll() {
         return map.values().stream().toList();
     }
 

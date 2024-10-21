@@ -13,10 +13,12 @@ import sap.ass01.solution.backend.hexagonal.ports.persistence.Repository;
 public class FileSystemRepositoryAdapter<T> implements Repository<T> {
 
     private final String entityName;
+    private final Class<T> entityType;
     private File file;
 
-    public FileSystemRepositoryAdapter(FileSystemDatabase db, String entityName) {
+    public FileSystemRepositoryAdapter(FileSystemDatabase db, String entityName, Class<T> entityType) {
         this.entityName = entityName;
+        this.entityType = entityType;
         String filename = entityName + ".json";
         try {
             file = db.getFile(filename);
@@ -60,10 +62,10 @@ public class FileSystemRepositoryAdapter<T> implements Repository<T> {
     }
 
     @Override
-    public Collection<T> getAll(Class<T> type) {
+    public Collection<T> getAll() {
         var jsonArray = getJsonArray();
         return jsonArray.stream().map(o -> ((JsonObject) o).getJsonObject("entity"))
-                .map(o -> o.mapTo(type)).toList();
+                .map(o -> o.mapTo(entityType)).toList();
     }
 
     @Override

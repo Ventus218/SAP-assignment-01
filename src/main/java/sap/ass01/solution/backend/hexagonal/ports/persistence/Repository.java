@@ -6,7 +6,7 @@ import sap.ass01.solution.backend.hexagonal.domain.model.EntityId;
 
 public interface Repository<T> {
 
-    public Collection<T> getAll(Class<T> type);
+    public Collection<T> getAll();
 
     public void insert(EntityId<T> id, T entity) throws DuplicateIdException;
 
