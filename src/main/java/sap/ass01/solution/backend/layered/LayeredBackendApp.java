@@ -19,13 +19,12 @@ public class LayeredBackendApp {
         var persistence = new FileSystemDBCollectionStorage(database);
         var businessLogic = new BusinessLogicImpl(persistence);
 
-        try {
-            businessLogic.signup(new CreateUserDTO(new UserId("user1")));
-            businessLogic
-                    .createEBike(new CreateEBikeDTO(new EBikeId("bike1"), new P2d(50, 100), new V2d(1, 0), 0, 100));
-        } catch (IllegalArgumentException e) {
-            // duplicates
-        }
+        // Create sample user and bike if not present
+        var user1Id = new UserId("user1");
+        businessLogic.getUser(user1Id).orElseGet(() -> businessLogic.signup(new CreateUserDTO(user1Id)));
+        var bike1Id = new EBikeId("bike1");
+        businessLogic.getEBike(bike1Id).orElseGet(
+                () -> businessLogic.createEBike(new CreateEBikeDTO(bike1Id, new P2d(50, 100), new V2d(1, 0), 0, 100)));
 
         Vertx
                 .vertx()
