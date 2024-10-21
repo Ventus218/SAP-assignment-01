@@ -4,7 +4,7 @@ import java.util.*;
 import sap.ass01.solution.backend.hexagonal.domain.model.EntityId;
 import sap.ass01.solution.backend.hexagonal.ports.persistence.Repository;
 import sap.ass01.solution.backend.hexagonal.ports.persistence.exceptions.*;
-import sap.ass01.solution.backend.hexagonal.technologies.database.InMemoryMapDatabase;
+import sap.ass01.solution.backend.hexagonal.technologies.persistence.InMemoryMapDatabase;
 
 public class InMemoryRepositoryAdapter<T> implements Repository<T> {
 

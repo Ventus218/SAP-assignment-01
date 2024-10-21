@@ -1,4 +1,4 @@
-package sap.ass01.solution.backend.hexagonal.technologies.database;
+package sap.ass01.solution.backend.hexagonal.technologies.persistence;
 
 import java.io.File;
 import java.io.IOException;
