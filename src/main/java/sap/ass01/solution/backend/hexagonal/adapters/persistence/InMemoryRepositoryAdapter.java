@@ -1,4 +1,4 @@
-package sap.ass01.solution.backend.hexagonal.adapters;
+package sap.ass01.solution.backend.hexagonal.adapters.persistence;
 
 import java.util.*;
 import sap.ass01.solution.backend.hexagonal.domain.model.EntityId;

@@ -1,4 +1,4 @@
-package sap.ass01.solution.backend.hexagonal.adapters;
+package sap.ass01.solution.backend.hexagonal.adapters.persistence;
 
 import java.io.*;
 import java.nio.file.Files;
