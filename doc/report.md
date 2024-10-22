@@ -15,6 +15,15 @@ L'amministratore:
 
 ![Admin frontend](./img/admin-frontend.png)
 
+## Utilizzo
+Per lanciare il sistema avviare solo uno tra i due backend:
+- [HexagonalBackendApp.java](../src/main/java/sap/ass01/solution/backend/hexagonal/HexagonalBackendApp.java)
+- [LayeredBackendApp.java](../src/main/java/sap/ass01/solution/backend/layered/LayeredBackendApp.java)
+
+E poi avviare un numero di istanze a piacere dei client:
+- [EBikeAdminApp.java](../src/main/java/sap/ass01/solution/frontend/admin/EBikeAdminApp.java)
+- [EBikeUserApp.java](../src/main/java/sap/ass01/solution/frontend/user/EBikeUserApp.java)
+
 ## Architettura del sistema completo
 
 ![Architettura del sistema](./img/client-server-diagram.png)
