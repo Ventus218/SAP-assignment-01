@@ -53,3 +53,24 @@ Tutte queste caratteristiche vengono [testate](../src/test/java/sap/ass01/soluti
 
 Il motivo per cui si sono scritte due implementazioni dei layer Database e Persistence è proprio per dimostrare che è possibile scambiare queste senza intaccare minimamente i livelli superiori (Business Logic e Presentation).
 In questo caso quindi il layer Persistence gioca il ruolo di un'interfaccia / adattatore per il layer Database.
+
+
+### Hexagonal
+
+![Architettura del server (hexagonal)](./img/backend-hexagonal-diagram.png)
+
+L'architettura esagonale presenta anch'essa dei layer:
+
+|Layer|Descrizione|
+|-----|-----------|
+|Domain| In questo layer sono situate la logica e le entità del dominio|
+|Ports| Questo non è un vero e proprio layer, ma le *ports* sono interfacce o protocolli che fungono da ponte tra il layer di Domain e quello degli Adapters|
+|Adapters| In questo layer sono situati gli *adapters* ovvero componenti che adattano il comportamento delle tecnologie al protocollo/interfaccia presentato dalle *ports*|
+|Technologies| Contiene tutte le tecnologie come ad esempio il client oppure i database|
+
+> **Nota:**
+>
+> Per enfatizzare l'estensibilità e il disaccoppiamento fornito da questa architettura si è scelto che il dominio utilizzi una repository per ogni entità che deve persistere (User, EBike e Ride).
+>
+> Questo significa che in, maniera trasparente al Dominio, il sistema potrebbe anche utilizzare contemporaneamente database diversi per le diverse entità.
+> (Nel diagramma questo è mostrato dai componenti sulla destra che hanno un aspetto diverso)
