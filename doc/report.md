@@ -83,3 +83,5 @@ L'architettura esagonale presenta anch'essa dei layer:
 >
 > Questo significa che in, maniera trasparente al Dominio, il sistema potrebbe anche utilizzare contemporaneamente database diversi per le diverse entità.
 > (Nel diagramma questo è mostrato dai componenti sulla destra che hanno un aspetto diverso)
+
+L'architettura è rafforzata attraverso dei [test](../src/test/java/sap/ass01/solution/backend/hexagonal/HexagonalArchTests.java) con Archunit
