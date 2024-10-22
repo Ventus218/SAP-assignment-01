@@ -16,10 +16,10 @@ public class FileSystemDBCollectionStorageTests {
     public void fileSystemDBCollectionStorageWorks() throws DuplicateIdException {
         DatabindCodec.mapper().registerModule(new Jdk8Module());
 
-        var path = "/Users/Alessandro/Desktop/testfolder";
         var recordsCollectionName = "records";
         var classesCollectionName = "classes";
-        var db = new FileSystemDatabaseImpl(new File(path));
+        var homeDir = System.getProperty("user.home");
+        var db = new FileSystemDatabaseImpl(new File(homeDir + "/Desktop/EBikeTests"));
         var storage = new FileSystemDBCollectionStorage(db);
 
         try {
