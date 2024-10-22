@@ -9,6 +9,9 @@ public class FileSystemDatabaseImpl implements FileSystemDatabase {
 
     public FileSystemDatabaseImpl(File storageDir) {
         String errorMessagePrefix = "Given storage directory " + storageDir.getPath();
+        if (!storageDir.exists() && !storageDir.mkdirs()) {
+            throw new IllegalArgumentException(errorMessagePrefix + " directory didn't exist and couldn't be breated");
+        }
         if (!storageDir.isDirectory()) {
             throw new IllegalArgumentException(errorMessagePrefix + " is not a directory");
         }

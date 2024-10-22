@@ -15,7 +15,8 @@ import sap.ass01.solution.backend.layered.presentation.HTTPServerPresentation;
 public class LayeredBackendApp {
     public static void main(String[] args) throws IllegalArgumentException {
         DatabindCodec.mapper().registerModule(new Jdk8Module());
-        var database = new FileSystemDatabaseImpl(new File("/Users/Alessandro/Desktop/testfolder"));
+        var homeDir = System.getProperty("user.home");
+        var database = new FileSystemDatabaseImpl(new File(homeDir + "/Desktop/EBikeDB"));
         var persistence = new FileSystemDBCollectionStorage(database);
         var businessLogic = new BusinessLogicImpl(persistence);
 

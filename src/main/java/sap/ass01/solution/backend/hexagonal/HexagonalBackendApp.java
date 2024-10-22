@@ -15,7 +15,8 @@ public class HexagonalBackendApp {
 
     public static void main(String[] args) {
         DatabindCodec.mapper().registerModule(new Jdk8Module());
-        var database = new FileSystemDatabaseImpl(new File("/Users/Alessandro/Desktop/testfolder"));
+        var homeDir = System.getProperty("user.home");
+        var database = new FileSystemDatabaseImpl(new File(homeDir + "/Desktop/EBikeDB"));
         var userRepository = new FileSystemRepositoryAdapter<User>(database, "users", User.class);
         var ebikeRepository = new FileSystemRepositoryAdapter<EBike>(database, "ebikes", EBike.class);
         var rideRepository = new FileSystemRepositoryAdapter<Ride>(database, "rides", Ride.class);
