@@ -11,7 +11,7 @@ import sap.ass01.solution.backend.layered.persistence.exceptions.DuplicateIdExce
 public class InMemoryMapDBCollectionStorageTests {
 
     @Test
-    public void test() throws DuplicateIdException {
+    public void inMemoryMapDBCollectionStorageWorks() throws DuplicateIdException {
         DatabindCodec.mapper().registerModule(new Jdk8Module());
 
         var recordsCollectionName = "records";

@@ -13,7 +13,7 @@ import sap.ass01.solution.backend.layered.persistence.exceptions.DuplicateIdExce
 public class FileSystemDBCollectionStorageTests {
 
     @Test
-    public void test() throws DuplicateIdException {
+    public void fileSystemDBCollectionStorageWorks() throws DuplicateIdException {
         DatabindCodec.mapper().registerModule(new Jdk8Module());
 
         var path = "/Users/Alessandro/Desktop/testfolder";
