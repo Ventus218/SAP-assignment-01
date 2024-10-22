@@ -2,6 +2,7 @@ package sap.ass01.solution.frontend.admin;
 
 import java.awt.*;
 import javax.swing.*;
+import java.util.stream.*;
 
 public class AdminControlPanelView extends JFrame {
 
@@ -124,12 +125,17 @@ public class AdminControlPanelView extends JFrame {
 					RenderingHints.VALUE_RENDER_QUALITY);
 			g2.clearRect(0, 0, this.getWidth(), this.getHeight());
 
+			var rides = StreamSupport.stream(model.getRides().spliterator(), false).toList();
 			model.getBikes().forEach(b -> {
 				var p = b.loc();
 				int x0 = (int) (dx + p.x());
 				int y0 = (int) (dy - p.y());
 				g2.drawOval(x0, y0, 20, 20);
-				g2.drawString(b.id().id(), x0, y0 + 35);
+				var userId = rides.stream()
+						.filter(r -> r.ebikeId().equals(b.id()) && r.endDate().isEmpty())
+						.findFirst()
+						.map(r -> r.userId().id());
+				g2.drawString(b.id().id() + userId.map(id -> " - " + id).orElse(""), x0, y0 + 35);
 				g2.drawString("(" + (int) p.x() + "," + (int) p.y() + ")", x0, y0 + 50);
 			});
 
