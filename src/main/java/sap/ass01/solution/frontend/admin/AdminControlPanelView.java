@@ -4,18 +4,19 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.stream.*;
 
-public class AdminControlPanelView extends JFrame {
+public class AdminControlPanelView extends JFrame implements AdminControlPanelViewModelListener {
 
 	private final int POLL_TICK_MILLIS = 1000;
 	private VisualiserPanel centralPanel;
+	private JPanel pluginsPanel;
 	private JButton addEBikeButton;
 	private JLabel loadingLabel;
-	private int loadingRequests = 0;
 	private final AdminControlPanelViewModel viewModel;
 	private final Timer pollTimer;
 
 	public AdminControlPanelView(AdminControlPanelViewModel viewModel) {
 		this.viewModel = viewModel;
+		viewModel.addListener(this);
 		setupView();
 		setVisible(true);
 
@@ -39,24 +40,33 @@ public class AdminControlPanelView extends JFrame {
 		addEBikeButton = new JButton("Add EBike");
 		addEBikeButton.addActionListener(e -> {
 			new AddEBikeDialog(this, ebike -> {
-				startLoading();
 				viewModel.createEBike(ebike, res -> {
 					res.handle(bike -> {
 						SwingUtilities.invokeLater(this::refreshView);
 						fetchBikes();
 					}, this::showError);
-					stopLoading();
 				});
 			}).setVisible(true);
 		});
 
+		pluginsPanel = new JPanel();
+		pluginsPanel.add(new JLabel("Plugin1"));
+		pluginsPanel.add(new JLabel("Plugin2"));
+
 		JPanel topPanel = new JPanel();
-		topPanel.add(addEBikeButton);
-		topPanel.add(loadingLabel);
+		var topPanelLayout = new BorderLayout();
+		topPanel.setLayout(topPanelLayout);
+		topPanel.add(new JButton("Add plugin"), BorderLayout.WEST);
+		topPanel.add(pluginsPanel, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 
 		centralPanel = new VisualiserPanel(800, 500, viewModel);
 		add(centralPanel, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void viewModelChanged() {
+		SwingUtilities.invokeLater(() -> refreshView());
 	}
 
 	private void fetchAllData() {
@@ -66,42 +76,35 @@ public class AdminControlPanelView extends JFrame {
 	}
 
 	private void fetchBikes() {
-		viewModel.fetchBikes(res -> {
-			res.handle(bikes -> SwingUtilities.invokeLater(this::refreshView), this::showError);
-		});
+		viewModel.fetchBikes(res -> SwingUtilities.invokeLater(() -> {
+			res.handle(bikes -> nop(), this::showError);
+		}));
 	}
 
 	private void fetchUsers() {
-		viewModel.fetchUsers(res -> {
-			res.handle(users -> SwingUtilities.invokeLater(this::refreshView), this::showError);
-		});
+		viewModel.fetchUsers(res -> SwingUtilities.invokeLater(() -> {
+			res.handle(users -> nop(), this::showError);
+		}));
 	}
 
 	private void fetchRides() {
-		viewModel.fetchRides(res -> {
-			res.handle(rides -> SwingUtilities.invokeLater(this::refreshView), this::showError);
-		});
+		viewModel.fetchRides(res -> SwingUtilities.invokeLater(() -> {
+			res.handle(rides -> nop(), this::showError);
+		}));
 	}
 
-	private void startLoading() {
-		loadingRequests++;
-		refreshView();
+	private void refreshView() {
+		loadingLabel.setVisible(viewModel.getRequestsInExecution() != 0);
+		addEBikeButton.setEnabled(viewModel.getRequestsInExecution() == 0);
+
+		centralPanel.refresh();
 	}
 
-	private void stopLoading() {
-		loadingRequests--;
-		refreshView();
+	private void nop() {
 	}
 
 	private void showError(Throwable error) {
 		JOptionPane.showMessageDialog(this, error.getMessage());
-	}
-
-	public void refreshView() {
-		loadingLabel.setVisible(loadingRequests != 0);
-		addEBikeButton.setEnabled(loadingRequests == 0);
-
-		centralPanel.refresh();
 	}
 
 	public static class VisualiserPanel extends JPanel {
