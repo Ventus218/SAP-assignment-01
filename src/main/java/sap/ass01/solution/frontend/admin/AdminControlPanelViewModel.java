@@ -23,7 +23,7 @@ public class AdminControlPanelViewModel {
 
     /* EBikes */
 
-    void fetchBikes(Consumer<Result<Iterable<EBike>, Throwable>> handler) {
+    public void fetchBikes(Consumer<Result<Iterable<EBike>, Throwable>> handler) {
         incRequestsInExecution();
         api.getEBikes(res -> {
             decRequestsInExecution();
@@ -37,7 +37,7 @@ public class AdminControlPanelViewModel {
         });
     }
 
-    void createEBike(CreateEBikeDTO dto, Consumer<Result<EBike, Throwable>> handler) {
+    public void createEBike(CreateEBikeDTO dto, Consumer<Result<EBike, Throwable>> handler) {
         incRequestsInExecution();
         api.createEBike(dto, res -> {
             decRequestsInExecution();
@@ -47,7 +47,7 @@ public class AdminControlPanelViewModel {
 
     /* Users */
 
-    void fetchUsers(Consumer<Result<Iterable<User>, Throwable>> handler) {
+    public void fetchUsers(Consumer<Result<Iterable<User>, Throwable>> handler) {
         incRequestsInExecution();
         api.getUsers(res -> {
             decRequestsInExecution();
@@ -63,7 +63,7 @@ public class AdminControlPanelViewModel {
 
     /* Rides */
 
-    void fetchRides(Consumer<Result<Iterable<Ride>, Throwable>> handler) {
+    public void fetchRides(Consumer<Result<Iterable<Ride>, Throwable>> handler) {
         incRequestsInExecution();
         api.getRides(res -> {
             decRequestsInExecution();
@@ -75,6 +75,12 @@ public class AdminControlPanelViewModel {
                 handler.accept(Result.failure(err));
             });
         });
+    }
+
+    public void addPlugin(RequestPlugin p) {
+        if (!plugins.containsKey(p.pluginId())) {
+            plugins.put(p.pluginId(), p);
+        }
     }
 
     private void incRequestsInExecution() {
@@ -109,6 +115,10 @@ public class AdminControlPanelViewModel {
 
     public Iterable<RequestPlugin> getPlugins() {
         return plugins.values();
+    }
+
+    public HTTPAPIs getApi() {
+        return api;
     }
 
     public void addListener(AdminControlPanelViewModelListener l) {

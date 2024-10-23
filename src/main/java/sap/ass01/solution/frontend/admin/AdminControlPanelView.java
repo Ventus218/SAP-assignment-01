@@ -2,6 +2,9 @@ package sap.ass01.solution.frontend.admin;
 
 import java.awt.*;
 import javax.swing.*;
+
+import sap.ass01.solution.frontend.admin.plugins.CreateEBikePlugin;
+
 import java.util.stream.*;
 
 public class AdminControlPanelView extends JFrame implements AdminControlPanelViewModelListener {
@@ -9,7 +12,6 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 	private final int POLL_TICK_MILLIS = 1000;
 	private VisualiserPanel centralPanel;
 	private JPanel pluginsPanel;
-	private JButton addEBikeButton;
 	private JLabel loadingLabel;
 	private final AdminControlPanelViewModel viewModel;
 	private final Timer pollTimer;
@@ -17,6 +19,9 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 	public AdminControlPanelView(AdminControlPanelViewModel viewModel) {
 		this.viewModel = viewModel;
 		viewModel.addListener(this);
+		var addEBikePlugin = new CreateEBikePlugin();
+		addEBikePlugin.init(this, viewModel);
+		viewModel.addPlugin(addEBikePlugin);
 		setupView();
 		setVisible(true);
 
@@ -37,21 +42,7 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 		loadingLabel = new JLabel("Loading...");
 		loadingLabel.setVisible(false);
 
-		addEBikeButton = new JButton("Add EBike");
-		addEBikeButton.addActionListener(e -> {
-			new AddEBikeDialog(this, ebike -> {
-				viewModel.createEBike(ebike, res -> {
-					res.handle(bike -> {
-						SwingUtilities.invokeLater(this::refreshView);
-						fetchBikes();
-					}, this::showError);
-				});
-			}).setVisible(true);
-		});
-
 		pluginsPanel = new JPanel();
-		pluginsPanel.add(new JLabel("Plugin1"));
-		pluginsPanel.add(new JLabel("Plugin2"));
 
 		JPanel topPanel = new JPanel();
 		var topPanelLayout = new BorderLayout();
@@ -62,11 +53,7 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 
 		centralPanel = new VisualiserPanel(800, 500, viewModel);
 		add(centralPanel, BorderLayout.CENTER);
-	}
-
-	@Override
-	public void viewModelChanged() {
-		SwingUtilities.invokeLater(() -> refreshView());
+		refreshView();
 	}
 
 	private void fetchAllData() {
@@ -93,9 +80,18 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 		}));
 	}
 
+	@Override
+	public void viewModelChanged() {
+		SwingUtilities.invokeLater(() -> refreshView());
+	}
+
 	private void refreshView() {
 		loadingLabel.setVisible(viewModel.getRequestsInExecution() != 0);
-		addEBikeButton.setEnabled(viewModel.getRequestsInExecution() == 0);
+
+		pluginsPanel.removeAll();
+		for (var p : viewModel.getPlugins()) {
+			pluginsPanel.add(p.getButton());
+		}
 
 		centralPanel.refresh();
 	}
@@ -103,7 +99,7 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 	private void nop() {
 	}
 
-	private void showError(Throwable error) {
+	public void showError(Throwable error) {
 		JOptionPane.showMessageDialog(this, error.getMessage());
 	}
 

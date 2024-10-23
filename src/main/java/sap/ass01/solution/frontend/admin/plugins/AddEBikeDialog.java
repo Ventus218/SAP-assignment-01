@@ -1,8 +1,10 @@
-package sap.ass01.solution.frontend.admin;
+package sap.ass01.solution.frontend.admin.plugins;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
+
+import sap.ass01.solution.frontend.admin.AdminControlPanelView;
 import sap.ass01.solution.frontend.model.*;
 import sap.ass01.solution.frontend.model.dto.CreateEBikeDTO;
 
