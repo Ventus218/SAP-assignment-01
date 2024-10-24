@@ -12,6 +12,6 @@ public class EBikeAdminApp {
     public static void main(String[] args) {
         DatabindCodec.mapper().registerModule(new Jdk8Module());
         HTTPAPIs apis = new HTTPAPIsImpl("localhost", 8080);
-        SwingUtilities.invokeLater(() -> new AdminControlPanelView(new AdminControlPanelViewModel(apis)));
+        SwingUtilities.invokeLater(() -> new AdminControlPanelView(new AdminControlPanelViewModel(apis), 1000));
     }
 }

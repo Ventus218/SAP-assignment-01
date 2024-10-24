@@ -11,14 +11,13 @@ import sap.ass01.solution.frontend.admin.plugins.CreateEBikePlugin;
 
 public class AdminControlPanelView extends JFrame implements AdminControlPanelViewModelListener {
 
-	private final int POLL_TICK_MILLIS = 1000;
 	private VisualiserPanel centralPanel;
 	private JPanel pluginsPanel;
 	private JLabel loadingLabel;
 	private final AdminControlPanelViewModel viewModel;
 	private final Timer pollTimer;
 
-	public AdminControlPanelView(AdminControlPanelViewModel viewModel) {
+	public AdminControlPanelView(AdminControlPanelViewModel viewModel, int pollTickMillis) {
 		this.viewModel = viewModel;
 		viewModel.addListener(this);
 		var addEBikePlugin = new CreateEBikePlugin();
@@ -28,7 +27,7 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 		setVisible(true);
 
 		fetchAllData();
-		pollTimer = new Timer(POLL_TICK_MILLIS, e -> fetchAllData());
+		pollTimer = new Timer(pollTickMillis, e -> fetchAllData());
 		pollTimer.setRepeats(true);
 		pollTimer.start();
 	}

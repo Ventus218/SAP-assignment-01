@@ -10,8 +10,10 @@ public class HTTPAPIsMock implements HTTPAPIs {
     private final Map<EBikeId, EBike> bikes = new HashMap<>();
     private final Map<UserId, User> users = new HashMap<>();
     private final Map<RideId, Ride> rides = new HashMap<>();
+    private final long delayMillis;
 
-    public HTTPAPIsMock() {
+    public HTTPAPIsMock(long delayMillis) {
+        this.delayMillis = delayMillis;
         var u1 = new User(new UserId("u1"), 100);
         users.put(u1.id(), u1);
         var b1 = new EBike(new EBikeId("b1"), EBikeState.AVAILABLE, new P2d(0, 0), new V2d(1, 0), 0, 100);
@@ -98,7 +100,7 @@ public class HTTPAPIsMock implements HTTPAPIs {
     }
 
     private void runDelayedThread(Runnable runnable) {
-        runDelayedThread(750, runnable);
+        runDelayedThread(delayMillis, runnable);
     }
 
     private void runDelayedThread(long delayMillis, Runnable runnable) {
