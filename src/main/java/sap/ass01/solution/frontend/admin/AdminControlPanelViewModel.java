@@ -84,12 +84,12 @@ public class AdminControlPanelViewModel {
         updateListeners();
     }
 
-    private void incRequestsInExecution() {
+    public synchronized void incRequestsInExecution() {
         requestsInExecution++;
         updateListeners();
     }
 
-    private void decRequestsInExecution() {
+    public synchronized void decRequestsInExecution() {
         requestsInExecution--;
         updateListeners();
     }
