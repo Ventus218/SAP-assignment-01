@@ -15,6 +15,14 @@ L'amministratore:
 
 ![Admin frontend](./img/admin-frontend.png)
 
+## Quality Attributes Scenarios
+|Quality attribute|Source|Stimulus|Artifact|Environment|Response|Response measure|
+|------------|------------|------------|------------|------------|------------|------------|
+|Modificabilità|Provider DB|Modifica la licenza|Base di codice|Situazione normale|Sviluppatori sostituiscono il DB con un altro|Codice appartenente ai livelli superiori non modificato (al limite quello riguardante la persistenza)|
+|Estendibilità|Stakeholder|Richiede un client mobile|Base di codice|Situazione normale|Sviluppatori realizzano un nuovo client mobile che usi le API web già esistenti|Codice preesistente non modificato|
+|Testabilità|Sviluppatori|Devono testare un componente del sistema inpendentemente dagli altri|Base di codice|Fase di sviluppo|Sviluppatori realizzano dei componenti mock che implementino le interfacce richieste dal componente sotto test|Il componente può essere testato in maniera inipendente senza dover modificare codice di produzione|
+|Estendibilità|Amministratore|Vuole aggiungere funzionalità alla console senza riavviarla|Client *admin*|Situazione normale|Gli sviluppatori forniscono un plugin con la nuova funzionalità implementata|Il client ottiene la nuova funzionalità senza mai essere riavviato|
+
 ## Utilizzo
 Per lanciare il sistema avviare solo uno tra i due backend:
 - [HexagonalBackendApp.java](../src/main/java/sap/ass01/solution/backend/hexagonal/HexagonalBackendApp.java)
