@@ -5,7 +5,7 @@ import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 import sap.ass01.solution.frontend.admin.*;
 
-public class DeleteEBikePlugin implements RequestPlugin, AdminControlPanelViewModelListener {
+public class DeleteEBikePlugin implements ButtonPlugin, AdminControlPanelViewModelListener {
 
     private boolean didInit = false;
     private AdminControlPanelView owner;

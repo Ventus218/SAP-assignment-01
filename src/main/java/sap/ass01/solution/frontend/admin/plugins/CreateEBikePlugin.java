@@ -5,7 +5,7 @@ import javax.swing.JButton;
 import javax.swing.SwingUtilities;
 import sap.ass01.solution.frontend.admin.*;
 
-public class CreateEBikePlugin implements RequestPlugin, AdminControlPanelViewModelListener {
+public class CreateEBikePlugin implements ButtonPlugin, AdminControlPanelViewModelListener {
 
     private boolean didInit = false;
     private AdminControlPanelView owner;

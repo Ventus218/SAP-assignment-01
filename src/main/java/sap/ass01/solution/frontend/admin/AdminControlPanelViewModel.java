@@ -14,7 +14,7 @@ public class AdminControlPanelViewModel {
     private Collection<EBike> bikes = new ArrayList<>();
     private Collection<User> users = new ArrayList<>();
     private Collection<Ride> rides = new ArrayList<>();
-    private Map<String, RequestPlugin> plugins = new HashMap<>();
+    private Map<String, ButtonPlugin> plugins = new HashMap<>();
     private Collection<AdminControlPanelViewModelListener> listeners = new HashSet<>();
 
     public AdminControlPanelViewModel(HTTPAPIs api) {
@@ -77,7 +77,7 @@ public class AdminControlPanelViewModel {
         });
     }
 
-    public void addPlugin(RequestPlugin p) {
+    public void addPlugin(ButtonPlugin p) {
         if (!plugins.containsKey(p.pluginId())) {
             plugins.put(p.pluginId(), p);
         }
@@ -114,7 +114,7 @@ public class AdminControlPanelViewModel {
         return requestsInExecution;
     }
 
-    public Iterable<RequestPlugin> getPlugins() {
+    public Iterable<ButtonPlugin> getPlugins() {
         return plugins.values();
     }
 

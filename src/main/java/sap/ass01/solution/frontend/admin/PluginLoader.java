@@ -7,8 +7,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class PluginLoader {
-    public static Iterable<RequestPlugin> loadPlugins(String jarFilePath) throws Exception {
-        List<RequestPlugin> result = new ArrayList<>();
+    public static Iterable<ButtonPlugin> loadPlugins(String jarFilePath) throws Exception {
+        List<ButtonPlugin> result = new ArrayList<>();
 
         JarFile jarFile = new JarFile(jarFilePath);
 
@@ -26,9 +26,9 @@ public class PluginLoader {
                 Class<?> loadedClass = classLoader.loadClass(className);
 
                 // Check if the class implements the target interface
-                if (RequestPlugin.class.isAssignableFrom(loadedClass) && !loadedClass.isInterface()) {
+                if (ButtonPlugin.class.isAssignableFrom(loadedClass) && !loadedClass.isInterface()) {
                     // Instantiate the class (assuming a no-arg constructor)
-                    result.add((RequestPlugin) loadedClass.getDeclaredConstructor().newInstance());
+                    result.add((ButtonPlugin) loadedClass.getDeclaredConstructor().newInstance());
                 }
             }
         }

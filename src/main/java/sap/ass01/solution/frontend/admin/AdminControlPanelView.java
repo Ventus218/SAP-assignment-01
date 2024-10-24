@@ -115,7 +115,7 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 	private void loadPlugin(File jar) {
 		try {
 			var plugins = PluginLoader.loadPlugins(jar.getAbsolutePath());
-			for (RequestPlugin plugin : plugins) {
+			for (ButtonPlugin plugin : plugins) {
 				plugin.init(this, viewModel);
 				viewModel.addPlugin(plugin);
 			}

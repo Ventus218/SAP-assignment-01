@@ -2,7 +2,7 @@ package sap.ass01.solution.frontend.admin;
 
 import javax.swing.JButton;
 
-public interface RequestPlugin {
+public interface ButtonPlugin {
 
     public String pluginId();
 
