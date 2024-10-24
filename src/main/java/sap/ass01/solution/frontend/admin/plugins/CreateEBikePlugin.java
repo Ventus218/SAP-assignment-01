@@ -41,9 +41,6 @@ public class CreateEBikePlugin implements ButtonPlugin, AdminControlPanelViewMod
 
     @Override
     public void viewModelChanged() {
-        SwingUtilities.invokeLater(() -> {
-            button.ifPresent(b -> b.setEnabled(viewModel.getRequestsInExecution() == 0));
-        });
     }
 
     @Override

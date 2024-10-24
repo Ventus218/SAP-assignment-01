@@ -28,10 +28,12 @@ public class DeleteEBikePlugin implements ButtonPlugin, AdminControlPanelViewMod
             var b = new JButton("Delete EBike");
             b.addActionListener(e -> {
                 new DeleteEBikeDialog(owner, ebikeId -> {
-                    viewModel.getApi().deleteEBike(ebikeId, res -> SwingUtilities.invokeLater(() -> {
-                        res.handle(ebike -> viewModel.fetchBikes((r) -> {
-                        }), owner::showError);
-                    }));
+                    viewModel.incRequestsInExecution();
+                    viewModel.getApi().deleteEBike(ebikeId, res -> {
+                        viewModel.decRequestsInExecution();
+                        SwingUtilities.invokeLater(
+                                () -> res.handle(ebike -> viewModel.fetchBikes((r) -> nop()), owner::showError));
+                    });
                 }).setVisible(true);
             });
             return b;
@@ -41,14 +43,14 @@ public class DeleteEBikePlugin implements ButtonPlugin, AdminControlPanelViewMod
 
     @Override
     public void viewModelChanged() {
-        SwingUtilities.invokeLater(() -> {
-            button.ifPresent(b -> b.setEnabled(viewModel.getRequestsInExecution() == 0));
-        });
     }
 
     @Override
     public String pluginId() {
         return this.getClass().getSimpleName();
+    }
+
+    private void nop() {
     }
 
     private void checkInit() {

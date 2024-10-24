@@ -43,8 +43,6 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 		loadingLabel = new JLabel("Loading...");
 		loadingLabel.setVisible(false);
 
-		pluginsPanel = new JPanel();
-
 		JPanel topPanel = new JPanel();
 		var topPanelLayout = new BorderLayout();
 		topPanel.setLayout(topPanelLayout);
@@ -55,7 +53,9 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 			}
 		});
 		topPanel.add(addPluginsButton, BorderLayout.WEST);
+		pluginsPanel = new JPanel();
 		topPanel.add(pluginsPanel, BorderLayout.EAST);
+		topPanel.add(loadingLabel, BorderLayout.CENTER);
 		add(topPanel, BorderLayout.NORTH);
 
 		centralPanel = new VisualiserPanel(800, 500, viewModel);
