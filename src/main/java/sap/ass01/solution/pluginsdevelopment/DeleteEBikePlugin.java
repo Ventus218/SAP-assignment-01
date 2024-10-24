@@ -1,4 +1,4 @@
-package sap.ass01.solution.frontend.admin.plugins;
+package sap.ass01.solution.pluginsdevelopment;
 
 import java.util.Optional;
 import javax.swing.JButton;
