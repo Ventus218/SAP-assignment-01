@@ -1,5 +1,22 @@
 # Report
 
+<!-- toc -->
+
+- [Requisiti](#requisiti)
+- [Quality Attributes Scenarios (QAS)](#quality-attributes-scenarios-qas)
+- [Utilizzo](#utilizzo)
+- [Architettura del sistema completo](#architettura-del-sistema-completo)
+- [Architettura dei client](#architettura-dei-client)
+  * [Client user](#client-user)
+  * [Client admin](#client-admin)
+    + [Architettura a micro-kernel](#architettura-a-micro-kernel)
+  * [Plugin realizzati](#plugin-realizzati)
+- [Architettura del server](#architettura-del-server)
+  * [Layered](#layered)
+  * [Hexagonal](#hexagonal)
+
+<!-- tocstop -->
+
 ## Requisiti
 
 L'utente:
