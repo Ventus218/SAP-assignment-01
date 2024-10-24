@@ -1,11 +1,13 @@
 package sap.ass01.solution.frontend.admin;
 
 import java.awt.*;
-import javax.swing.*;
-
-import sap.ass01.solution.frontend.admin.plugins.CreateEBikePlugin;
-
+import java.io.File;
+import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.stream.*;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import sap.ass01.solution.frontend.admin.plugins.CreateEBikePlugin;
 
 public class AdminControlPanelView extends JFrame implements AdminControlPanelViewModelListener {
 
@@ -47,7 +49,13 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 		JPanel topPanel = new JPanel();
 		var topPanelLayout = new BorderLayout();
 		topPanel.setLayout(topPanelLayout);
-		topPanel.add(new JButton("Add plugin"), BorderLayout.WEST);
+		var addPluginsButton = new JButton("Add plugin");
+		addPluginsButton.addActionListener(e -> {
+			for (var jar : selectPluginJars()) {
+				loadPlugin(jar);
+			}
+		});
+		topPanel.add(addPluginsButton, BorderLayout.WEST);
 		topPanel.add(pluginsPanel, BorderLayout.EAST);
 		add(topPanel, BorderLayout.NORTH);
 
@@ -92,6 +100,7 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 		for (var p : viewModel.getPlugins()) {
 			pluginsPanel.add(p.getButton());
 		}
+		pluginsPanel.revalidate();
 
 		centralPanel.refresh();
 	}
@@ -101,6 +110,34 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 
 	public void showError(Throwable error) {
 		JOptionPane.showMessageDialog(this, error.getMessage());
+	}
+
+	private void loadPlugin(File jar) {
+		try {
+			var plugins = PluginLoader.loadPlugins(jar.getAbsolutePath());
+			for (RequestPlugin plugin : plugins) {
+				plugin.init(this, viewModel);
+				viewModel.addPlugin(plugin);
+			}
+		} catch (Exception e) {
+			showError(new Exception("Something went wrong while loading the selected plugin", e));
+		}
+	}
+
+	private Iterable<File> selectPluginJars() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setMultiSelectionEnabled(true);
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fileChooser.setFileFilter(new FileNameExtensionFilter("JAR Files", "jar"));
+
+		int result = fileChooser.showOpenDialog(this);
+
+		// If the user selects files and clicks "Open"
+		if (result == JFileChooser.APPROVE_OPTION) {
+			return Arrays.asList(fileChooser.getSelectedFiles());
+		} else {
+			return new ArrayList<>();
+		}
 	}
 
 	public static class VisualiserPanel extends JPanel {

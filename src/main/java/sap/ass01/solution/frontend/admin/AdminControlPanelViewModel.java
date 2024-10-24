@@ -81,6 +81,7 @@ public class AdminControlPanelViewModel {
         if (!plugins.containsKey(p.pluginId())) {
             plugins.put(p.pluginId(), p);
         }
+        updateListeners();
     }
 
     private void incRequestsInExecution() {
