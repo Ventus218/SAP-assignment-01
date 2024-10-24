@@ -15,10 +15,10 @@ L'amministratore:
 
 ![Admin frontend](./img/admin-frontend.png)
 
-## Quality Attributes Scenarios
+## Quality Attributes Scenarios (QAS)
 |Quality attribute|Source|Stimulus|Artifact|Environment|Response|Response measure|
 |------------|------------|------------|------------|------------|------------|------------|
-|Modificabilità|Provider DB|Modifica la licenza|Base di codice|Situazione normale|Sviluppatori sostituiscono il DB con un altro|Codice appartenente ai livelli superiori non modificato (al limite quello riguardante la persistenza)|
+|Modificabilità|Provider DB|Modifica la licenza|Base di codice|Situazione normale|Sviluppatori sostituiscono il DB con un altro|Codice non riguardante la persistenza non deve essere modificato|
 |Estendibilità|Stakeholder|Richiede un client mobile|Base di codice|Situazione normale|Sviluppatori realizzano un nuovo client mobile che usi le API web già esistenti|Codice preesistente non modificato|
 |Testabilità|Sviluppatori|Devono testare un componente del sistema inpendentemente dagli altri|Base di codice|Fase di sviluppo|Sviluppatori realizzano dei componenti mock che implementino le interfacce richieste dal componente sotto test|Il componente può essere testato in maniera inipendente senza dover modificare codice di produzione|
 |Estendibilità|Amministratore|Vuole aggiungere funzionalità alla console senza riavviarla|Client *admin*|Situazione normale|Gli sviluppatori forniscono un plugin con la nuova funzionalità implementata|Il client ottiene la nuova funzionalità senza mai essere riavviato|
@@ -42,6 +42,8 @@ Il sistema sarà composto da un server e due client:
 
 Si è scelto di utilizzare una API REST HTTP per implementare la comunicazione tra client e server. Non ci saranno quindi dipendenze nel codice in nessuna direzione tra client e server, questo viene [testato](../src/test/java/sap/ass01/solution/ClientServerArchTests.java) con ArchUnit.
 
+L'utilizzo di una API REST HTTP permette di passare il QAS riguardo all'estendibilità (possibile aggiunta di client mobile).
+
 ## Architettura dei client
 
 Entrambi i client sono molto semplici e implementano un'architettura del tipo MVVM (dove il ruolo di Model viene giocato dal server.)
@@ -60,6 +62,8 @@ Si è implementata una versione estremamente semplificata di questa architettura
 
 E' infatti possibile aggiungere dinamicamente a runtime dei bottoni che aggiungono funzionalità al client. Questi devono implementare l'interfaccia [ButtonPlugin.java](../src/main/java/sap/ass01/solution/frontend/admin/ButtonPlugin.java) e hanno accesso al View Model e alla View.
 
+Questo permette di passare il QAS riguardo all'estendibilità (estensione delle funzionalità dell'admin).
+
 > **Nota:**
 >
 > Questa implementazione è davvero semplice in quanto in realtà queste funzionalità sono già implementate e disponibili nel server.
@@ -74,6 +78,8 @@ Si sono realizzati due plugin:
   (Si noti che i [sorgenti](../src/main/java/sap/ass01/solution/pluginsdevelopment/), una volta compilati nel JAR,  sono stati commentati in modo da non farli compilare dall'IDE all'avvio dell'applicazionie.)
 
 ## Architettura del server
+
+Entrambe le architetture scelte permettono, grazie all'uso intensivo di interfacce, di passare i QAS riguardanti la testabilità e la modificabilità.
 
 ### Layered
 
