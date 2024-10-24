@@ -44,9 +44,34 @@ Si è scelto di utilizzare una API REST HTTP per implementare la comunicazione t
 
 ## Architettura dei client
 
-![Architettura dei client](./img/client-diagram.png)
-
 Entrambi i client sono molto semplici e implementano un'architettura del tipo MVVM (dove il ruolo di Model viene giocato dal server.)
+
+### Client user
+
+![Architettura del client user](./img/user-client-diagram.png)
+
+### Client admin
+
+![Architettura del client admin](./img/admin-client-diagram.png)
+
+#### Architettura a micro-kernel
+
+Si è implementata una versione estremamente semplificata di questa architettura nel client admin.
+
+E' infatti possibile aggiungere dinamicamente a runtime dei bottoni che aggiungono funzionalità al client. Questi devono implementare l'interfaccia [ButtonPlugin.java](../src/main/java/sap/ass01/solution/frontend/admin/ButtonPlugin.java) e hanno accesso al View Model e alla View.
+
+> **Nota:**
+>
+> Questa implementazione è davvero semplice in quanto in realtà queste funzionalità sono già implementate e disponibili nel server.
+> Un'approccio interessante sarebbe stato quello di implementare ogni funzionalità sul server come un plugin, si è scelto però di non farlo per non rendere la realizzazione di questo assignment troppo lunga.
+
+### Plugin realizzati
+Si sono realizzati due plugin:
+- [CreateEBikePlugin.java](../src/main/java/sap/ass01/solution/frontend/admin/plugins/CreateEBikePlugin.java) è il plugin che permette all'amministratore di aggiungere bici al sistema. Questo viene aggiunto a compile time in quanto è una funzionalità essenziale che era presente nei requisiti.
+
+- [DeleteEBikePlugin.jar](../compiled-plugins/DeleteEBikePlugin.jar) è il plugin che permette all'amministratore di eliminare una bici dal sistema.
+
+  (Si noti che i [sorgenti](../src/main/java/sap/ass01/solution/pluginsdevelopment/), una volta compilati nel JAR,  sono stati commentati in modo da non farli compilare dall'IDE all'avvio dell'applicazionie.)
 
 ## Architettura del server
 
@@ -93,23 +118,3 @@ L'architettura esagonale presenta anch'essa dei layer:
 > (Nel diagramma questo è mostrato dai componenti sulla destra che hanno un aspetto diverso)
 
 L'architettura è rafforzata attraverso dei [test](../src/test/java/sap/ass01/solution/backend/hexagonal/HexagonalArchTests.java) con Archunit
-
-
-## Architettura a micro-kernel
-
-Si è implementata una versione estremamente semplificata di questa architettura nel client admin.
-
-E' infatti possibile aggiungere dinamicamente a runtime dei bottoni che aggiungono funzionalità al client. Questi devono implementare l'interfaccia [ButtonPlugin.java](../src/main/java/sap/ass01/solution/frontend/admin/ButtonPlugin.java) e hanno accesso al View Model e alla View.
-
-> **Nota:**
->
-> Questa implementazione è davvero semplice in quanto in realtà queste funzionalità sono già implementate e disponibili nel server.
-> Un'approccio interessante sarebbe stato quello di implementare ogni funzionalità sul server come un plugin, si è scelto però di non farlo per non rendere la realizzazione di questo assignment troppo lunga.
-
-### Plugin realizzati
-Si sono realizzati due plugin:
-- [CreateEBikePlugin.java](../src/main/java/sap/ass01/solution/frontend/admin/plugins/CreateEBikePlugin.java) è il plugin che permette all'amministratore di aggiungere bici al sistema. Questo viene aggiunto a compile time in quanto è una funzionalità essenziale che era presente nei requisiti.
-
-- [DeleteEBikePlugin.jar](../compiled-plugins/DeleteEBikePlugin.jar) è il plugin che permette all'amministratore di eliminare una bici dal sistema.
-
-  (Si noti che i [sorgenti](../src/main/java/sap/ass01/solution/pluginsdevelopment/), una volta compilati nel JAR,  sono stati commentati in modo da non farli compilare dall'IDE all'avvio dell'applicazionie.)

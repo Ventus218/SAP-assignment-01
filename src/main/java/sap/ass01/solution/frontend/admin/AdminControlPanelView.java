@@ -3,6 +3,8 @@ package sap.ass01.solution.frontend.admin;
 import java.awt.*;
 import java.io.File;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.stream.*;
 import javax.swing.*;
@@ -15,15 +17,14 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 	private JPanel pluginsPanel;
 	private JLabel loadingLabel;
 	private final AdminControlPanelViewModel viewModel;
+	private final Map<String, ButtonPlugin> plugins = new HashMap<>();
 	private final Timer pollTimer;
 
 	public AdminControlPanelView(AdminControlPanelViewModel viewModel, int pollTickMillis) {
 		this.viewModel = viewModel;
 		viewModel.addListener(this);
-		var addEBikePlugin = new CreateEBikePlugin();
-		addEBikePlugin.init(this, viewModel);
-		viewModel.addPlugin(addEBikePlugin);
 		setupView();
+		addPlugin(new CreateEBikePlugin());
 		setVisible(true);
 
 		fetchAllData();
@@ -96,7 +97,7 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 		loadingLabel.setVisible(viewModel.getRequestsInExecution() != 0);
 
 		pluginsPanel.removeAll();
-		for (var p : viewModel.getPlugins()) {
+		for (var p : plugins.values()) {
 			pluginsPanel.add(p.getButton());
 		}
 		pluginsPanel.revalidate();
@@ -115,12 +116,19 @@ public class AdminControlPanelView extends JFrame implements AdminControlPanelVi
 		try {
 			var plugins = PluginLoader.loadPlugins(jar.getAbsolutePath());
 			for (ButtonPlugin plugin : plugins) {
-				plugin.init(this, viewModel);
-				viewModel.addPlugin(plugin);
+				addPlugin(plugin);
 			}
 		} catch (Exception e) {
 			showError(new Exception("Something went wrong while loading the selected plugin", e));
 		}
+	}
+
+	private void addPlugin(ButtonPlugin p) {
+		if (!plugins.containsKey(p.pluginId())) {
+			plugins.put(p.pluginId(), p);
+			p.init(this, viewModel);
+		}
+		refreshView();
 	}
 
 	private Iterable<File> selectPluginJars() {
